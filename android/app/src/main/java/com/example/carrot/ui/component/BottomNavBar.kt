@@ -1,7 +1,5 @@
 package com.example.carrot.ui.component
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -14,6 +12,10 @@ import com.example.carrot.Community
 import com.example.carrot.Home
 import com.example.carrot.MyPage
 import com.example.carrot.ui.component.modifier.drawColoredShadow
+import com.example.carrot.ui.destinations.ChatNavDestination.CHAT_ROUTE
+import com.example.carrot.ui.destinations.CommunityNavDestination.COMMUNITY_ROUTE
+import com.example.carrot.ui.destinations.HomeNavDestination.HOME_ROUTE
+import com.example.carrot.ui.destinations.MyPageNavDestination.MYPAGE_ROUTE
 
 @Composable
 fun BottomNavBar(
@@ -21,10 +23,10 @@ fun BottomNavBar(
 ) {
     var selectedItem by remember { mutableStateOf(0) }
     val items = listOf(
-        Home.route,
-        Community.route,
-        Chat.route,
-        MyPage.route
+        HOME_ROUTE,
+        COMMUNITY_ROUTE,
+        CHAT_ROUTE,
+        MYPAGE_ROUTE
     )
     val navIcons = listOf(
         Home.icon,
@@ -61,15 +63,17 @@ fun BottomNavBar(
                 selected = selectedItem == index,
                 onClick = {
                     selectedItem = index
-                    navController.navigate(item) {
-                        navController.graph.startDestinationRoute?.let { route ->
-                            popUpTo(route) {
-                                saveState = true
-                            }
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
+                    navController.navigate(item)
+                    // TODO("페이지 전환 후 돌아 올 때 상태를 저장하게 바꿔야함.")
+//                    {
+//                        navController.graph.startDestinationRoute?.let { route ->
+//                            popUpTo(route) {
+//                                saveState = true
+//                            }
+//                        }
+//                        launchSingleTop = true
+//                        restoreState = true
+//                    }
                 },
                 alwaysShowLabel = true,
                 colors = NavigationBarItemDefaults.colors(

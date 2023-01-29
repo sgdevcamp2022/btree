@@ -1,34 +1,81 @@
 package com.example.carrot.ui.home
 
-import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import com.example.carrot.model.SalePost
+import com.example.carrot.model.SampleData
+import com.example.carrot.ui.component.CategoryIconBtn
+import com.example.carrot.ui.component.LocationTitleBtn
+import com.example.carrot.ui.component.NotificationIconBtn
+import com.example.carrot.ui.component.SearchIconBtn
+import com.example.carrot.ui.component.modifier.drawColoredShadow
+import com.example.carrot.ui.home.post.PostCard
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeTopAppBar(
+    modifier: Modifier = Modifier
+) {
+    TopAppBar(
+        modifier = Modifier
+            .drawColoredShadow(offsetX = 2.dp),
+        title = {
+            LocationTitleBtn()
+        },
+        actions = {
+            SearchIconBtn()
+            CategoryIconBtn()
+            NotificationIconBtn()
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.White
+        )
+    )
+}
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    homeViewModel: HomeViewModel = HomeViewModel()
+    homeViewModel: HomeViewModel = HomeViewModel(),
+    navigateToPost: (Long) -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        Log.i("homescreen", "code running~")
-
-        Text(
-            text = "This is Home",
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center,
-            color = Color.Black,
-            modifier = Modifier.align(Alignment.Center)
+    Scaffold (
+        topBar = {HomeTopAppBar()},
+        content = {
+                Column(
+                    modifier = Modifier.padding(top = 60.dp, bottom = 70.dp)
+                ) {
+                    PostList(
+                        posts = SampleData.sampleSalePost,
+                        navigateToPost = navigateToPost
+                    )
+                }
+            }
         )
+}
+
+@Composable
+fun PostList(
+    posts: List<SalePost>,
+    navigateToPost: (postId: Long) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(
+        modifier = modifier
+    ) {
+        items(posts){ post ->
+            PostCard(
+                post = post,
+                navigateToPost = navigateToPost
+            )
+        }
     }
 }
