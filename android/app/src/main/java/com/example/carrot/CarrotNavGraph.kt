@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.carrot.ui.chat.chatNavGraph
+import com.example.carrot.ui.community.CommunityAction
 import com.example.carrot.ui.community.communityNavGraph
 import com.example.carrot.ui.destinations.HomeNavDestination.HOME_ROUTER
 import com.example.carrot.ui.home.HomeAction
@@ -17,10 +18,11 @@ import com.example.carrot.ui.myPage.myPageNavGraph
 fun CarrotNavGraph(navController: NavHostController = rememberNavController()) {
 
     val homeAction = remember(navController){ HomeAction(navController) }
+    val communityAction = remember(navController){ CommunityAction(navController) }
 
     NavHost(navController = navController, startDestination = HOME_ROUTER ){
         homeNavGraph(navController = navController, homeAction = homeAction)
-        communityNavGraph(navController = navController)
+        communityNavGraph(navController = navController, communityAction = communityAction)
         chatNavGraph(navController = navController)
         myPageNavGraph(navController = navController)
         // TODO: ADD NOTIFICATION ROUTE, LOCATION ROUTE

@@ -20,9 +20,7 @@ import com.example.carrot.ui.home.post.PostCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeTopAppBar(
-    modifier: Modifier = Modifier
-) {
+fun HomeTopAppBar() {
     TopAppBar(
         modifier = Modifier
             .drawColoredShadow(offsetX = 2.dp),

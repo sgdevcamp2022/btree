@@ -1,4 +1,4 @@
-package com.example.carrot.ui.home.post
+package com.example.carrot.ui.community.post
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -9,43 +9,35 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.carrot.model.SalePost
+import com.example.carrot.model.ComPost
 import com.example.carrot.model.SampleData
 import com.example.carrot.ui.component.*
 import com.example.carrot.ui.component.modifier.drawColoredShadow
-import com.example.carrot.ui.theme.CarrotTheme
-import com.example.carrot.ui.theme.Grey160
-import com.example.carrot.ui.theme.Grey245
-import com.example.carrot.ui.theme.transparent000
+import com.example.carrot.ui.theme.*
 
-// TODO("일정 스크롤 밑으로 내일 시 투명한걸 없애고 흰색으로 바꿀 것")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostTopAppBar(
     onBack: () -> Unit
 ) {
     TopAppBar(
-        modifier = Modifier
-            .drawColoredShadow(offsetX = 2.dp),
         title = {
             Row {
-                BackIconBtn(Color.White, onBack)
-                HomeIconBtn(Color.White)
+                BackIconBtn(color = Black80,onBack = onBack)
+                HomeIconBtn(color = Black80)
             }
 
         },
         actions = {
-            MoreIconBtn(Color.White)
+            MoreIconBtn(color = Black80)
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Unspecified
+            containerColor = Color.White
         )
     )
 }
@@ -54,7 +46,7 @@ fun PostTopAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostScreen(
-    post: SalePost,
+    post: ComPost,
     postViewModel: PostViewModel = PostViewModel(),
     onBack: () -> Unit
 ) {
@@ -70,58 +62,33 @@ fun PostScreen(
 
 @Composable
 fun PostMetaData(
-    post: SalePost
+    post: ComPost
 ) {
     LazyColumn(
-        modifier = Modifier.background(Color.White)
+        modifier = Modifier
+            .background(Color.White)
+            .padding(top = 60.dp, bottom = 70.dp)
     ) {
-        item {
-            PostImages(post = post)
-        }
-        item {
-            PostWriterInfo(post = post)
-            Divider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 8.dp, end = 8.dp),
-                color = Grey245
-            )
-        }
-        item {
-            PostTitle(post = post)
-        }
-        item {
-            PostContent(post = post)
-        }
+        item { PostWriterInfo(post = post) }
+        item { PostContent(post = post)}
+        item { PostInteraction()}
     }
 }
 
-@Preview("PostScreen test")
+@Preview("Postscreen preview")
 @Composable
-fun PostScreenPreview() {
+fun PostScreenPreview(){
     CarrotTheme {
         Surface {
-            PostScreen(post = SampleData.sampleSalePost[3], onBack = {})
+            PostScreen(post = SampleData.sampleComPost[3], onBack = {})
         }
     }
 }
 
 @Composable
-fun PostImages(post: SalePost) {
-    val imageModifier = Modifier
-        .fillMaxWidth()
-        .height(340.dp)
-        .clip(shape = MaterialTheme.shapes.extraSmall)
-    Image(
-        painter = painterResource(id = post.titleImage),
-        contentDescription = "post title image",
-        modifier = imageModifier,
-        contentScale = ContentScale.Crop
-    )
-}
-
-@Composable
-fun PostWriterInfo(post: SalePost) {
+fun PostWriterInfo(
+    post: ComPost
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -152,62 +119,32 @@ fun PostWriterInfo(post: SalePost) {
         }
         Text(text = post.writer.manner.toString())
     }
-
 }
 
-@Preview("PostScreen PostWriter")
+@Preview("Postscreen PostWriter")
 @Composable
 fun PostWriterPreview(){
     CarrotTheme {
         Surface {
-            PostWriterInfo(post = SampleData.sampleSalePost[3])
+            PostWriterInfo(post = SampleData.sampleComPost[3])
         }
     }
 }
 
 @Composable
-fun PostTitle(post: SalePost) {
+fun PostContent(
+    post: ComPost
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp, horizontal = 10.dp)
+            .padding(8.dp)
     ) {
-        Text(
-            modifier = Modifier.padding(bottom = 10.dp),
-            text = post.title,
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold
-        )
-        Row {
-            Text(text = post.category, color = Grey160 )
-            Spacer(modifier = Modifier.width(10.dp))
-            Text(text = "${post.createdAt}분 전", color = Grey160)
-        }
-    }
-}
-
-@Preview("PostScreen Post title")
-@Composable
-fun PostTitlePreview(){
-    CarrotTheme {
-        Surface {
-            PostTitle(post = SampleData.sampleSalePost[3])
-        }
-    }
-}
-
-
-@Composable
-fun PostContent(post: SalePost) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 10.dp)
-    ) {
-        Text(
-            text = post.content,
-            style = MaterialTheme.typography.bodyLarge
-        )
+        Text(text = post.title, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(text = post.content)
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(text = "조회 ${post.views}", color = Grey160)
     }
 }
 
@@ -216,9 +153,43 @@ fun PostContent(post: SalePost) {
 fun PostContentPreview(){
     CarrotTheme {
         Surface {
-            PostContent(post = SampleData.sampleSalePost[3])
+            PostContent(post = SampleData.sampleComPost[3])
         }
     }
 }
 
+@Composable
+fun PostInteraction(
 
+) {
+    Column {
+        Divider(
+            modifier = Modifier.fillMaxWidth(),
+            color = Grey230
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            LikeBtnWithText()
+            CommentBtnWithText()
+            FavoriteBtnWithText()
+        }
+        Divider(
+            modifier = Modifier.fillMaxWidth(),
+            color = Grey230
+        )
+    }
+}
+
+@Preview("Post Interaction preview")
+@Composable
+fun PostInteractionPreview(){
+    CarrotTheme {
+        Surface {
+            PostInteraction()
+        }
+    }
+}

@@ -2,10 +2,7 @@ package com.example.carrot.ui.component
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.HomeMax
-import androidx.compose.material.icons.outlined.HomeMini
-import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -17,7 +14,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.example.carrot.ui.theme.Grey160
 
 @Composable
 fun LocationTitleBtn() {
@@ -32,7 +31,8 @@ fun LocationTitleBtn() {
         }
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(start = 12.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
@@ -53,6 +53,68 @@ fun LocationTitleBtn() {
     }
 }
 
+@Composable
+fun LikeBtnWithText(){
+
+    IconButton(
+        modifier = Modifier.width(100.dp),
+        onClick = { /*TODO*/ }
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.ThumbUp,
+                contentDescription = "LIKE",
+                tint = Grey160
+            )
+            Text(text = "공감하기", color = Grey160)
+        }
+    }
+}
+
+@Composable
+fun CommentBtnWithText(){
+
+    IconButton(
+        modifier = Modifier.width(100.dp),
+        onClick = { /*TODO*/ }
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Comment,
+                contentDescription = "COMMENT",
+                tint = Grey160
+            )
+            Text(text = "댓글", color = Grey160)
+        }
+    }
+}
+
+@Composable
+fun FavoriteBtnWithText(){
+
+    IconButton(
+        modifier = Modifier.width(100.dp),
+        onClick = { /*TODO*/ }
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.FavoriteBorder,
+                contentDescription = "FAVORITE",
+                tint = Grey160
+            )
+            Text(text = "관심", color = Grey160)
+        }
+    }
+}
 
 
 @Composable
@@ -70,6 +132,16 @@ fun CategoryIconBtn(){
     IconButton(onClick = { /* doSomething() */ }) {
         Icon(
             imageVector = Icons.Rounded.List,
+            contentDescription = "Category"
+        )
+    }
+}
+
+@Composable
+fun MyInfoIconBtn(){
+    IconButton(onClick = { /* doSomething() */ }) {
+        Icon(
+            imageVector = Icons.Outlined.AccountCircle,
             contentDescription = "Category"
         )
     }

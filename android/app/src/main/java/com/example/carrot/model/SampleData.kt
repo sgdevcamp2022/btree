@@ -65,4 +65,51 @@ object SampleData {
             likeNum = 10,
         )
     )
+
+    val sampleComPost = listOf<ComPost>(
+        ComPost(
+            postId = 1,
+            likesNum = 0,
+            commentNum = 0
+        ),
+        ComPost(
+            postId = 2,
+            likesNum = 2,
+            commentNum = 0
+        ),
+        ComPost(
+            postId = 3,
+            likesNum = 0,
+            commentNum = 3
+        ),
+        ComPost(
+            postId = 4,
+            likesNum = 4,
+            commentNum = 4
+        ),
+        ComPost(
+            postId = 5,
+            likesNum = 10,
+            commentNum = 0
+        ),ComPost(
+            postId = 6,
+            likesNum = 0,
+            commentNum = 10
+        ),
+        ComPost(
+            postId = 7,
+            likesNum = 7,
+            commentNum = 70
+        ),
+        ComPost(
+            postId = 8,
+            likesNum = 80,
+            commentNum = 8
+        ),
+        ComPost(
+            postId = 9,
+            likesNum = 90,
+            commentNum = 90
+        )
+    )
 }

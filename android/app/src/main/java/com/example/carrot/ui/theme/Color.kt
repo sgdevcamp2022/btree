@@ -12,6 +12,7 @@ val Pink40 = Color(0xFF7D5260)
 
 val Carrot = Color(237, 120, 51)
 val CarrotSelected = Color(252, 245, 241)
+val BlueHighLight = Color(31, 141, 190, 255)
 val Black33 = Color(33, 33, 33)
 val Black80 = Color(80, 80, 80)
 val Grey160 = Color(160, 160, 160)

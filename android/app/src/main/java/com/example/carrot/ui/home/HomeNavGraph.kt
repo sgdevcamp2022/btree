@@ -34,6 +34,7 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController, homeAction: HomeA
     }
 }
 
+// TODO: 인터페이스로 만들 것
 class HomeAction(navController: NavController){
     val navigateToPost: (Long) -> Unit = { postId ->
         navController.navigate("${HomeNavDestination.POST_ROUTE}/${postId}")
