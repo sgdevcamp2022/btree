@@ -1,0 +1,40 @@
+version: '1'
+services:  # 컨테이너의 서비스라는것을 정의
+  mysql: # [이미지명]:
+    container_name: mysql # image: [이미지명]:[태그명]
+    platform: linux/x86_64
+    build: ./mysql/
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/db:/docker-entrypoint-initdb.d
+    networks:
+      - default
+      - auth_net
+    environment: 
+      - MYSQL_ROOT_PASSWORD=dlatl
+      - MYSQL_DATABASE=account
+    tty: true
+  fastapi:
+    depends_on:
+      - mysql
+    container_name: fast_api
+    platform: linux/x86_64
+    build: ./auth_server
+    restart: always
+    tty: true
+    volumes:
+      - ./auth_server:/app
+    networks:
+      - default
+      - auth_net
+    ports:
+      - 8080:8080
+    environment:
+      - DATABASE_USERNAME=root
+      - DATABASE_PASSWORD=dlatl
+      - DATABASE=account
+      - DATABASE_HOST=mysql
+
+networks:
+  auth_net:
