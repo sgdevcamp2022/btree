@@ -107,7 +107,7 @@ def check_my_token(email: str, token: str, db: Session):
     if user is None:
         return False
     print(user)
-    mytoken = str(user.userId) + user.email + "sgd"
+    mytoken = user.email + "sgd"
     if token == mytoken:
         return True
     else:
