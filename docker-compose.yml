@@ -1,17 +1,14 @@
-version: '1'
+version: '3.8'
 services:  # 컨테이너의 서비스라는것을 정의
   mysql: # [이미지명]:
-    container_name: mysql # image: [이미지명]:[태그명]
+    container_name: mysql 
     platform: linux/x86_64
-    build: ./mysql/
+    build: ./mysql/ # Dockerfile이 존재하는 상대경로
     ports:
-      - "3306:3306"
+      - "3306:3306" # 외부포트:내부포트
     volumes:
-      - ./mysql/db:/docker-entrypoint-initdb.d
-    networks:
-      - default
-      - auth_net
-    environment: 
+      - ./mysql/db:/docker-entrypoint-initdb.d # up되서 처음 실행할 sql문들을 모아놓은 폴더
+    environment:
       - MYSQL_ROOT_PASSWORD=dlatl
       - MYSQL_DATABASE=account
     tty: true
@@ -25,9 +22,6 @@ services:  # 컨테이너의 서비스라는것을 정의
     tty: true
     volumes:
       - ./auth_server:/app
-    networks:
-      - default
-      - auth_net
     ports:
       - 8080:8080
     environment:
@@ -35,6 +29,28 @@ services:  # 컨테이너의 서비스라는것을 정의
       - DATABASE_PASSWORD=dlatl
       - DATABASE=account
       - DATABASE_HOST=mysql
+  redis:
+    image: redis:latest  # image: [이미지명]:[태그명]
+    container_name: redis_fastapi_db
+    hostname: redis
+    ports:
+      - 6379:6379
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
 
-networks:
-  auth_net:
+  
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis_ui
+    hostname: redis-commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+      - HTTP_USER=admin
+      - HTTP_PASSWORD=dlatl
+    ports:
+      - 8081:8081
+    depends_on:
+      - redis
+volumes:
+  redis-data:
