@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowInsets.Type
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.PaddingValues
@@ -39,7 +40,10 @@ fun CarrotApp() {
 
     Scaffold(
         content = { innerPadding ->
-            NavContent(innerPadding = innerPadding, navController = navController)
+            NavContent(
+                innerPadding = innerPadding,
+                navController = navController
+            )
         },
         bottomBar = { BottomNavBar(navController = navController) },
         containerColor = androidx.compose.ui.graphics.Color.White,

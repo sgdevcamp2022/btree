@@ -192,3 +192,13 @@ fun HomeIconBtn(color: Color){
         )
     }
 }
+
+@Composable
+fun SettingIconBtn(){
+    IconButton(onClick = { /* doSomething() */ }) {
+        Icon(
+            imageVector = Icons.Outlined.Settings,
+            contentDescription = "Settings"
+        )
+    }
+}

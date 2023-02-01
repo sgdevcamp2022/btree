@@ -27,7 +27,7 @@ fun NavGraphBuilder.communityNavGraph(navController: NavController, communityAct
     }
 }
 
-class CommunityAction(navController: NavController){
+class CommunityAction(navController: NavController) {
     val navigateToPost: (Long) -> Unit = { postId ->
         navController.navigate("${CommunityNavDestination.POST_ROUTE}/${postId}")
     }

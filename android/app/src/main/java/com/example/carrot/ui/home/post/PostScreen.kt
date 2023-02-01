@@ -6,6 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme.shapes
+import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import com.example.carrot.model.SalePost
 import com.example.carrot.model.SampleData
 import com.example.carrot.ui.component.*
@@ -24,6 +27,7 @@ import com.example.carrot.ui.theme.CarrotTheme
 import com.example.carrot.ui.theme.Grey160
 import com.example.carrot.ui.theme.Grey245
 import com.example.carrot.ui.theme.transparent000
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 // TODO("일정 스크롤 밑으로 내일 시 투명한걸 없애고 흰색으로 바꿀 것")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,8 +36,6 @@ fun PostTopAppBar(
     onBack: () -> Unit
 ) {
     TopAppBar(
-        modifier = Modifier
-            .drawColoredShadow(offsetX = 2.dp),
         title = {
             Row {
                 BackIconBtn(Color.White, onBack)
@@ -64,7 +66,7 @@ fun PostScreen(
             PostMetaData(
                 post = post
             )
-        }
+        },
     )
 }
 

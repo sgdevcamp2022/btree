@@ -17,6 +17,7 @@ import com.example.carrot.ui.component.NotificationIconBtn
 import com.example.carrot.ui.component.SearchIconBtn
 import com.example.carrot.ui.component.modifier.drawColoredShadow
 import com.example.carrot.ui.home.post.PostCard
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
