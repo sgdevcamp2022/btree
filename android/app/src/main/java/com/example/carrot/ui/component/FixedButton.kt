@@ -131,7 +131,7 @@ fun SearchIconBtn(){
 fun CategoryIconBtn(){
     IconButton(onClick = { /* doSomething() */ }) {
         Icon(
-            imageVector = Icons.Rounded.List,
+            imageVector = Icons.Rounded.Menu,
             contentDescription = "Category"
         )
     }
@@ -176,6 +176,20 @@ fun BackIconBtn(
     IconButton(onClick = { onBack() }) {
         Icon(
             imageVector = Icons.Rounded.ArrowBack,
+            contentDescription = "Go Back",
+            tint = color
+        )
+    }
+}
+
+@Composable
+fun CancelIconBtn(
+    color: Color,
+    onCancel: () -> Unit
+){
+    IconButton(onClick = { onCancel() }) {
+        Icon(
+            imageVector = Icons.Rounded.Close,
             contentDescription = "Go Back",
             tint = color
         )
