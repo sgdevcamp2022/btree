@@ -52,6 +52,9 @@ docker-compose down
 ---
 ## Note
 
+
+### sgd auth-server
+https://serotina.notion.site/Auth-System-8e9dca94fe6f465ca9e4960b56bb3734
 ### Python library packages
 
 Some of the Python packages used in this app are defined in `auth_server/requirements.txt`.
@@ -76,3 +79,5 @@ http://localhost:8080/docs
 ### API 명세서
 
 https://www.notion.so/serotina/bfe47ad02f1c4c5b9f250136a3fec0ee?v=3434441bdce441e5b8fa441e9f0a57bb
+
+
