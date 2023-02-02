@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: r2dbc:mysql://localhost:3306/btree_chat
+    username: btree
+    password: smgdevcamp2022
