@@ -29,6 +29,7 @@ services:  # 컨테이너의 서비스라는것을 정의
       - DATABASE_PASSWORD=dlatl
       - DATABASE=account
       - DATABASE_HOST=mysql
+      - REDIS_OM_URL=redis://redis:6379
   redis:
     image: redis:latest  # image: [이미지명]:[태그명]
     container_name: redis_fastapi_db
@@ -38,8 +39,6 @@ services:  # 컨테이너의 서비스라는것을 정의
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
       - redis-data:/data
-
-  
   redis-commander:
     image: rediscommander/redis-commander:latest
     container_name: redis_ui

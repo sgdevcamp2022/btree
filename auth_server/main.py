@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # from passlib.context import CryptContext
 import crud, models, schemas, utils
 from database import SessionLocal, engine
+import router
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -107,3 +108,5 @@ async def update_nickname(token: str = Depends(oauth2_scheme),
     user = utils.get_current_user(token, db)
     user = crud.update_user_nickname(db,user, new_nickname)
     return user
+
+app.include_router(router.router)
