@@ -1,9 +1,10 @@
 version: '3.8'
 services:  # 컨테이너의 서비스라는것을 정의
-  mysql: # [이미지명]:
+  mysql: 
     container_name: mysql 
     platform: linux/x86_64
     build: ./mysql/ # Dockerfile이 존재하는 상대경로
+    restart: always
     ports:
       - "3306:3306" # 외부포트:내부포트
     volumes:

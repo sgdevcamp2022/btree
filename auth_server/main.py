@@ -9,6 +9,8 @@ from fastapi.middleware.cors import CORSMiddleware
 # from passlib.context import CryptContext
 import crud, models, schemas, utils
 from database import SessionLocal, engine
+from config import rd
+from redis_om import Migrator
 import router
 
 models.Base.metadata.create_all(bind=engine)
@@ -44,7 +46,6 @@ def get_db():
 @app.post("/token", response_model=schemas.RefreshIncludedToken)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),
                                  db: Session = Depends(get_db)):                                 
-    # user = authenticate_user(fake_users_db, form_data.username, form_data.password) # 인증
     user = utils.authenticate_user(db, form_data.username, form_data.password)
     if not user or not user.is_active:
         raise HTTPException(
@@ -53,16 +54,44 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
             headers={"WWW-Authenticate" : "Bearer"},
         )
     # if Users?
+    
     refresh_token = utils.create_refresh_token(
         data = {"sub": user.email},
         expires_delta=timedelta(minutes=utils.REFRESH_TOKEN_EXPIRE_MINUTES)
     )
+    rd.set(refresh_token, user.userId, timedelta(minutes=3))
     access_token = utils.create_access_token(
         data={"sub": user.email},
         expires_delta=timedelta(minutes=utils.ACCESS_TOKEN_EXPIRE_MINUTES)
     )
     return {"refresh_token": refresh_token, "access_token" : access_token, "token_type" : "bearer"}
 
+@app.post("/generate_access_token/", response_model=schemas.Token)
+async def re_issue_access_token(token: str = Depends(oauth2_scheme), # access_token
+                                refresh_token: str = None,
+                                db: Session = Depends(get_db)):
+    if not utils.is_valid_accessToken(token):
+        if rd.exists(refresh_token):
+            userId = rd.get(refresh_token)
+            user = crud.get_user(db, user_id=userId)
+            access_token = utils.create_access_token(
+                data={"sub": user.email},
+                expires_delta=timedelta(minutes=utils.ACCESS_TOKEN_EXPIRE_MINUTES)
+            )
+            return {"access_token": access_token, "token_type": "bearer"}
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Generate token miss : RefreshToken not found",
+                headers={"WWW-Authenticate": "Bearer"},
+            ) # 401 errors
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="accessToken is valid, this is bad request",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
 
 @app.post('/register', summary="Create new user", response_model=schemas.User)
 async def create_user(data: schemas.UserCreate, db : Session = Depends(get_db)):
@@ -71,9 +100,9 @@ async def create_user(data: schemas.UserCreate, db : Session = Depends(get_db)):
     user = crud.get_user_by_email(db, data.email)
     if user is not None:
             raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="User with this email already exist"
-        )
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="User with this email already exist"
+            )
     user = {
         'email': data.email,
         'hashed_password': utils.get_hashed_password(data.password),
@@ -94,9 +123,15 @@ async def register_verify(tokendata: schemas.TokenDataModel, db : Session = Depe
             detail="Token is different"
         )
 
-@app.get("/profile", response_model = schemas.UserProfile)
+@app.get("/profile/", response_model = schemas.UserProfile)
 async def read_profile(token: str = Depends(oauth2_scheme),
-                         db: Session = Depends(get_db)):
+                        db: Session = Depends(get_db)):
+    if not utils.is_valid_accessToken(token):
+        return HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User with this email already exist"
+        )
+
     user = utils.get_current_user(token, db)
     print(user.nickname, user.email, user.manner_temporature, user.create_at)
     return user
@@ -105,8 +140,18 @@ async def read_profile(token: str = Depends(oauth2_scheme),
 async def update_nickname(token: str = Depends(oauth2_scheme),
                           db: Session = Depends(get_db),
                           new_nickname: str = None):
+    if not utils.is_valid_accessToken(token):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User with this email already exist"
+        )
+        
     user = utils.get_current_user(token, db)
     user = crud.update_user_nickname(db,user, new_nickname)
     return user
+
+@app.get("/items/")
+async def read_items(token: str = Depends(oauth2_scheme)):
+    return {"token": token}
 
 app.include_router(router.router)
