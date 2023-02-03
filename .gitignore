@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### aws ignore###
+src/main/resources/application-aws.yml
