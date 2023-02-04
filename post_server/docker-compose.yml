@@ -3,7 +3,7 @@ version: '3'
 services:
   database:
     container_name: mysql_db
-    image: mysql/mysql-server:5.7
+    image: mysql:latest
     restart: on-failure
     environment:
       MYSQL_DATABASE: btree_project
