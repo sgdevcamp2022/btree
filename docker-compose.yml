@@ -1,0 +1,78 @@
+version: '3.8'
+services:  # 컨테이너의 서비스라는것을 정의
+  mysql: 
+    container_name: mysql 
+    platform: linux/x86_64
+    build: ./mysql/ # Dockerfile이 존재하는 상대경로
+    restart: always
+    ports:
+      - "3306:3306" # 외부포트:내부포트
+    volumes:
+      - ./mysql/db:/docker-entrypoint-initdb.d # up되서 처음 실행할 sql문들을 모아놓은 폴더
+    environment:
+      MYSQL_DATABASE_ACCOUNT: account
+      MYSQL_DATABASE: btree_project
+      MYSQL_ROOT_HOST: 'root'
+      MYSQL_ROOT_PASSWORD: 1234      
+    tty: true
+  fastapi:
+    depends_on:
+      - mysql
+    container_name: fast_api
+    platform: linux/x86_64
+    build: ./auth_server
+    restart: always
+    tty: true
+    volumes:
+      - ./auth_server:/app
+    ports:
+      - 8000:8000
+    environment:
+      - DATABASE_USERNAME=root
+      - DATABASE_PASSWORD=dlatl
+      - DATABASE=account
+      - DATABASE_HOST=mysql
+      - REDIS_OM_URL=redis://redis:6379
+  redis:
+    image: redis:latest  # image: [이미지명]:[태그명]
+    container_name: redis_fastapi_db
+    hostname: redis
+    ports:
+      - 6379:6379
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis_ui
+    hostname: redis-commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+      - HTTP_USER=admin
+      - HTTP_PASSWORD=dlatl
+    ports:
+      - 8081:8081
+    depends_on:
+      - redis
+
+  application:
+    restart: unless-stopped
+    container_name: post_server
+    build:
+      context: ./post_server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/btree_project?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "1234"
+    depends_on:
+      - mysql
+    networks:
+      - test_network
+
+networks:
+  test_network:      
+volumes:
+  redis-data:
