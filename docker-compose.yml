@@ -13,11 +13,16 @@ services:  # 컨테이너의 서비스라는것을 정의
       MYSQL_DATABASE_ACCOUNT: account
       MYSQL_DATABASE: btree_project
       MYSQL_ROOT_HOST: 'root'
-      MYSQL_ROOT_PASSWORD: 1234      
+      MYSQL_ROOT_PASSWORD: 1234    
+    healthcheck:
+            test: ["CMD", "mysqladmin", "-u$MYSQL_ROOT_HOST", "-p$MYSQL_ROOT_PASSWORD", "ping", "-h", "localhost"]
+            timeout: 20s
+            retries: 10    
     tty: true
   fastapi:
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     container_name: fast_api
     platform: linux/x86_64
     build: ./auth_server
@@ -29,7 +34,7 @@ services:  # 컨테이너의 서비스라는것을 정의
       - 8000:8000
     environment:
       - DATABASE_USERNAME=root
-      - DATABASE_PASSWORD=dlatl
+      - DATABASE_PASSWORD=1234
       - DATABASE=account
       - DATABASE_HOST=mysql
       - REDIS_OM_URL=redis://redis:6379
@@ -68,11 +73,8 @@ services:  # 컨테이너의 서비스라는것을 정의
       SPRING_DATASOURCE_USERNAME: "root"
       SPRING_DATASOURCE_PASSWORD: "1234"
     depends_on:
-      - mysql
-    networks:
-      - test_network
-
-networks:
-  test_network:      
+      mysql:
+        condition: service_healthy
+   
 volumes:
   redis-data:
