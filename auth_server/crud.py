@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from fastapi import HTTPException, status
 
 import models, schemas
 
@@ -32,6 +33,11 @@ def update_user_nickname(db: Session, user: models.User , new_nickname: str):
         user.nickname = new_nickname
         db.commit()
         db.refresh(user)
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="user not found"
+        )    
     return user
 
 def get_items(db: Session, skip: int = 0, limit: int = 100):
