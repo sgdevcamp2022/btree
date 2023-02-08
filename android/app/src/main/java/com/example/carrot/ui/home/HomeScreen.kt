@@ -83,7 +83,7 @@ fun HomeScreen(
                         Text(text = "글쓰기", fontWeight = FontWeight.Bold)
                     }
                 }                
-            }
+            },
         )
 }
 
