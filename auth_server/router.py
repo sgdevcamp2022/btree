@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from schemas import Task, RefreshToken, UserBase, email_token
+from schemas import Task, RefreshToken, UserBase
 from sqlalchemy.orm import Session
 from config import rd
 import utils
@@ -33,8 +33,7 @@ def read_root():
 
 
 @router.get("/email_verify_token/{token}")
-async def auth_verify_email(email_token: email_token, db: Session = Depends(get_db)):
-    token = email_token.token
+async def auth_verify_email(token: str, db: Session = Depends(get_db)):
     if rd.exists(token):
         email = rd.get(token)
         rd.delete(token)
