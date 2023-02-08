@@ -33,12 +33,18 @@ class Item(ItemBase):
 class UserBase(BaseModel):
     email: str
 
+    class Config:
+        orm_mode = True
+
 class UserCreate(UserBase):
     password: str
 
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+class email_token(BaseModel):
+    token: str
 
 class RefreshIncludedToken(Token):
     refresh_token: str
