@@ -9,10 +9,13 @@ import com.example.carrot.AuthenticateViewModel
 import com.example.carrot.CarrotApp
 import com.example.carrot.ui.destinations.AuthNavDestination.ANNOUNCEMENT_SCREEN
 import com.example.carrot.ui.destinations.AuthNavDestination.AUTH_ROUTER
+import com.example.carrot.ui.destinations.AuthNavDestination.FIRST_ENTRANCE
 import com.example.carrot.ui.destinations.AuthNavDestination.IN_APP
 import com.example.carrot.ui.destinations.AuthNavDestination.SIGNIN_SCREEN
 import com.example.carrot.ui.destinations.AuthNavDestination.SIGNUP_SCREEN
 import com.example.carrot.ui.destinations.HomeNavDestination.HOME_ROUTE
+import com.example.carrot.ui.sign.firstEntrance.FirstEntranceScreen
+import com.example.carrot.ui.sign.signup.SignUpScreen
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController, authAction: AuthAction, authenticateViewModel: AuthenticateViewModel){
     navigation(startDestination = ANNOUNCEMENT_SCREEN, route = AUTH_ROUTER.toString()) {
@@ -25,12 +28,23 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController, authAction: A
         composable(SIGNIN_SCREEN){
             LogInScreen(
                 navigateToHome = authAction.navigateToHomeScreen,
+                navigateToFirstEntranceScreen = authAction.navigateToFirstEntranceScreen,
                 authenticateViewModel = authenticateViewModel,
                 onBack = authAction.upPress
             )
         }
         composable(SIGNUP_SCREEN){
-
+            SignUpScreen(
+                navigateToLoginScreen = authAction.navigateToLoginScreen,
+                onBack = authAction.upPress
+            )
+        }
+        composable(FIRST_ENTRANCE){
+            FirstEntranceScreen(
+                navigateToHome = authAction.navigateToHomeScreen,
+                authenticateViewModel = authenticateViewModel,
+                onBack = authAction.upPress
+            )
         }
     }
 }
@@ -42,6 +56,9 @@ class AuthAction(navController: NavController){
     }
     val navigateToSignUpScreen: () -> Unit = {
         navController.navigate(SIGNUP_SCREEN)
+    }
+    val navigateToFirstEntranceScreen: () -> Unit = {
+        navController.navigate(FIRST_ENTRANCE)
     }
     val navigateToHomeScreen: () -> Unit = {
         navController.navigate(HOME_ROUTE)

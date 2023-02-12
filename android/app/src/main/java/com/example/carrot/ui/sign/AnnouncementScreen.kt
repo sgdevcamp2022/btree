@@ -65,7 +65,7 @@ fun AnnouncementContent(
                 .fillMaxWidth()
         ) {
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { navigateToSignup() },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Carrot
                 ),

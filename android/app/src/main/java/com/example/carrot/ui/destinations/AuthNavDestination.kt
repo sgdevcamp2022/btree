@@ -5,5 +5,6 @@ object AuthNavDestination {
     const val ANNOUNCEMENT_SCREEN = "announce"
     const val SIGNIN_SCREEN = "sign in"
     const val SIGNUP_SCREEN = "sign up"
+    const val FIRST_ENTRANCE = "first entrance"
     const val IN_APP = "in app"
 }

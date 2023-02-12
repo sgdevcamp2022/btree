@@ -6,22 +6,21 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.carrot.AuthenticateViewModel
 import com.example.carrot.ui.component.*
-import com.example.carrot.ui.component.modifier.drawColoredShadow
 import com.example.carrot.ui.sign.login.LoginScreenViewModel
 import com.example.carrot.ui.theme.*
+import kotlinx.coroutines.*
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,6 +28,7 @@ import com.example.carrot.ui.theme.*
 @Composable
 fun LogInScreen(
     navigateToHome: () -> Unit,
+    navigateToFirstEntranceScreen: () -> Unit,
     authenticateViewModel: AuthenticateViewModel,
     loginScreenViewModel: LoginScreenViewModel = LoginScreenViewModel(),
     onBack: () -> Unit
@@ -49,18 +49,23 @@ fun LogInScreen(
         },
         content = {
             LogInContent(
-                navigateToHome = {navigateToHome()},
-                authenticateViewModel = authenticateViewModel,
+                authenticate = authenticateViewModel.authenticate,
                 loginScreenViewModel = loginScreenViewModel
             )
+            if (authenticateViewModel.authenticated.value){
+                navigateToHome()
+            }
+            if (loginScreenViewModel.firstOrNot.value){
+                navigateToFirstEntranceScreen()
+            }
         }
     )
+
 }
 
 @Composable
 fun LogInContent(
-    navigateToHome: () -> Unit,
-    authenticateViewModel: AuthenticateViewModel,
+    authenticate: () -> Unit,
     loginScreenViewModel: LoginScreenViewModel
 ) {
     Column(
@@ -76,8 +81,7 @@ fun LogInContent(
         AuthInfo(loginScreenViewModel = loginScreenViewModel)
         Spacer(modifier = Modifier.height(12.dp))
         LoginBtn(
-            navigateToHome = navigateToHome,
-            authenticate = authenticateViewModel.authenticate,
+            authenticate = authenticate,
             loginScreenViewModel = loginScreenViewModel
         )
     }
@@ -127,7 +131,7 @@ fun AuthInfo(
             },
             placeholder = { Text(text = "이메일을 입력해주세요", color = Grey210)},
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Carrot
+                focusedBorderColor = Black33
             ),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email
@@ -144,7 +148,7 @@ fun AuthInfo(
             },
             placeholder = { Text(text = "비밀번호를 입력해주세요", color = Grey210)},
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Carrot
+                focusedBorderColor = Black33
             ),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password
@@ -154,16 +158,25 @@ fun AuthInfo(
     }
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun LoginBtn(
-    navigateToHome: () -> Unit,
     authenticate: () -> Unit,
     loginScreenViewModel: LoginScreenViewModel
 ){
+    val context = LocalContext.current
+
     Button(
         onClick = {
-            authenticate()
-            navigateToHome()
+            GlobalScope.launch {
+                loginScreenViewModel.requestLogin(
+                    context = context
+                )
+                loginScreenViewModel.getUserInfo(
+                    context = context,
+                    authenticate = authenticate
+                )
+            }
         },
         colors = ButtonDefaults.buttonColors(
             containerColor = Carrot
@@ -183,7 +196,8 @@ fun LoginBtn(
 fun SignInScreenPreview(){
     CarrotTheme {
         Surface {
-            LogInScreen({}, AuthenticateViewModel(), LoginScreenViewModel(), {})
+            LogInScreen({}, {}, AuthenticateViewModel(), LoginScreenViewModel(), {})
         }
     }
 }
+

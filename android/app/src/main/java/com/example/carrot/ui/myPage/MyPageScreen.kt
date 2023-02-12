@@ -47,6 +47,7 @@ fun MypageTopAppBar(){
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyPageScreen(
+    myPageScreenViewModel: MyPageScreenViewModel = MyPageScreenViewModel()
 ) {
     Scaffold(
         topBar = { MypageTopAppBar() },
@@ -57,19 +58,23 @@ fun MyPageScreen(
                     .fillMaxSize()
                     .background(Color.White)
             ) {
-                MyPageCategoryList()
+                MyPageCategoryList(
+                    myPageScreenViewModel = myPageScreenViewModel
+                )
             }
         }
     )
 }
 
 @Composable
-fun MyPageCategoryList(){
+fun MyPageCategoryList(
+    myPageScreenViewModel: MyPageScreenViewModel
+){
     Column(
         modifier = Modifier
             .padding(horizontal = 10.dp)
     ) {
-        MyProfile()
+        MyProfile(myPageScreenViewModel.nickname.value)
         Divider(
             modifier = Modifier.fillMaxWidth(),
             color = Grey230
@@ -92,7 +97,9 @@ fun MyPageCategoryList(){
 }
 
 @Composable
-fun MyProfile(){
+fun MyProfile(
+    myNickname: String
+){
     Row(
         modifier = Modifier
             .padding(vertical = 8.dp)
@@ -111,7 +118,7 @@ fun MyProfile(){
             )
             Spacer(modifier = Modifier.width(10.dp))
             Text(
-                text = SampleData.sampleUser[0].name,
+                text = myNickname,
                 fontWeight = FontWeight.Black
             )
         }
