@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  database:
+    container_name: mysql_db
+    image: mysql/mysql-server:5.7
+    restart: on-failure
+    environment:
+      MYSQL_DATABASE: btree_project
+      MYSQL_ROOT_HOST: 'root'
+      MYSQL_ROOT_PASSWORD: 1234
+      TZ: 'Asia/Seoul'
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/db:/docker-entrypoint-initdb.d # MySQL 설정 파일 위치
+    command:
+      - "mysqld"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    networks:
+      - test_network
+
+  application:
+    restart: unless-stopped
+    container_name: post_server
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/btree_project?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "1234"
+    depends_on:
+      - database
+    networks:
+      - test_network
+
+networks:
+  test_network:
