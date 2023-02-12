@@ -44,7 +44,6 @@ class PostApplicationTests {
 		this.boardrepository = boardrepository;
 	}
 
-
 	@Test
 	void contextLoads() {
 		PageRequest sortByPostid=PageRequest.of(0, 1, Sort.by("boardpostid").descending());
