@@ -180,7 +180,7 @@ services:  # 컨테이너의 서비스라는것을 정의
     depends_on:
       mysql:
         condition: service_healthy
-   
+
 volumes:
   redis-data:
   setup:
