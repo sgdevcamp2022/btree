@@ -10,7 +10,7 @@ spring:
         format_sql: 'true'
     show-sql: 'true'
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
   profiles:
     include:
       - aws

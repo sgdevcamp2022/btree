@@ -32,12 +32,14 @@ public class salescontroller {
                 .body("게시글 작성 성공");
     }
 
-    @GetMapping("/{id}") //상세 페이지 조회
-    public ResponseEntity<salesresponsedto> detailPost (@PathVariable("id") int postid, User user){
-        salespost post = saleservice.findById((long) postid);
+    @GetMapping("/detail")//상세 페이지 조회
+    public ResponseEntity<salesresponsedto> detailPost (@RequestParam Long id){
+
+        salespost post = saleservice.findById(id);
         salesresponsedto salesresponsedto = salesmapper.fromEntity(post);
         return ResponseEntity.ok()
-                .body(salesresponsedto);
+                    .body(salesresponsedto);
+
     }
 
     @GetMapping// 게시글 목록
@@ -57,7 +59,7 @@ public class salescontroller {
     }
 
     @PostMapping("/saleslike/{postid}") //좋아요 기능
-    public void clickSalesLike(User user, @PathVariable("postid") Long id){
-        saleslikeservice.clickpostlike(user, id);
+    public void clickSalesLike(User user, @PathVariable("postid") int id){
+        saleslikeservice.clickpostlike(user, (long) id);
     }
 }
