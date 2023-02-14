@@ -14,3 +14,18 @@ CREATE TABLE es_table (
   modification_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   insertion_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+DROP table IF EXISTS boardpost;
+create table boardpost
+(
+    boardpostid bigint auto_increment
+        primary key,
+    commentnum  int default 0 null,
+    content     varchar(255)  null,
+    contentimg  varchar(255)  null,
+    likenum     int default 0 null,
+    locate      varchar(255)  null,
+    title       varchar(255)  null,
+    updatetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    username    varchar(255)  null
+);
