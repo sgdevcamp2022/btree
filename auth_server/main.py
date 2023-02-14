@@ -137,16 +137,16 @@ async def read_profile(token: str = Depends(oauth2_scheme),
     print(user.nickname, user.email, user.manner_temporature, user.create_at)
     return user
 
-@app.post("/update_nickname", response_model = schemas.UserProfile)
-async def update_nickname(token: str = Depends(oauth2_scheme),
-                          db: Session = Depends(get_db),
-                          new_nickname: Union[str, None] = None):
+@app.post("/update_nickname/", response_model = schemas.UserProfile)
+async def update_nickname(nickname: schemas.UserNickname,
+                          token: str = Depends(oauth2_scheme),
+                          db: Session = Depends(get_db)):
     if not utils.is_valid_accessToken(token):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="User with this email already exist"
+            detail="Token is invalid"
         )
-        
+    new_nickname = nickname.new_nickname
     user = utils.get_current_user(token, db)
     user = crud.update_user_nickname(db, user, new_nickname)
     return user

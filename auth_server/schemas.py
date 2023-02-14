@@ -35,7 +35,6 @@ class UserBase(BaseModel):
 
     class Config:
         orm_mode = True
-
 class UserCreate(UserBase):
     password: str
 
@@ -71,6 +70,12 @@ class UserProfile(UserBase):
     nickname: Optional[str]
     manner_temporature: float
     create_at: datetime
+
+    class Config:
+        orm_mode = True
+
+class UserNickname(BaseModel):
+    new_nickname: str
 
     class Config:
         orm_mode = True
