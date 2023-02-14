@@ -137,6 +137,26 @@ async def read_profile(token: str = Depends(oauth2_scheme),
     print(user.nickname, user.email, user.manner_temporature, user.create_at)
     return user
 
+@app.get("/profile/{email}")
+async def read_profile_email(email: str, 
+                        token: str = Depends(oauth2_scheme),
+                        db: Session = Depends(get_db)):
+    print(email)
+    if not utils.is_valid_accessToken(token):
+        return HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User with this email already exist"
+        )
+    try:
+        user = crud.get_user_by_email(db, email)
+    except:
+        return HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User with this email is not found"
+        )
+    print(user.nickname, user.email, user.manner_temporature, user.create_at)
+    return user
+
 @app.post("/update_nickname/", response_model = schemas.UserProfile)
 async def update_nickname(nickname: schemas.UserNickname,
                           token: str = Depends(oauth2_scheme),
