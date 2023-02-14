@@ -4,6 +4,11 @@ grant all privileges on *.* to 'root'@'%';
 flush privileges;
 
 use btree_project;
+DROP table IF EXISTS boardcomment;
+DROP table IF EXISTS salespost;
+DROP table IF EXISTS saleslike;
+DROP table IF EXISTS boardpost;
+DROP table IF EXISTS boardcomment;
 
 create table boardcomment
 (
@@ -60,16 +65,6 @@ create table boardlike
         primary key,
     postid      bigint       null,
     username    varchar(255) null
-);
-
-create table boardcomment
-(
-    boardcommentid bigint auto_increment
-        primary key,
-    boardpostid    int          null,
-    commenttime    datetime(6)  null,
-    content        varchar(255) null,
-    username       varchar(255) null
 );
 
 

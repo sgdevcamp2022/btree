@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # from passlib.context import CryptContext
 import crud, models, schemas, utils
 from database import SessionLocal, engine
+from typing import Union
 from config import rd
 from redis_om import Migrator
 import router
@@ -136,18 +137,38 @@ async def read_profile(token: str = Depends(oauth2_scheme),
     print(user.nickname, user.email, user.manner_temporature, user.create_at)
     return user
 
-@app.post("/update_nickname", response_model = schemas.UserProfile)
-async def update_nickname(token: str = Depends(oauth2_scheme),
-                          db: Session = Depends(get_db),
-                          new_nickname: str = None):
+@app.get("/profile/{email}")
+async def read_profile_email(email: str, 
+                        token: str = Depends(oauth2_scheme),
+                        db: Session = Depends(get_db)):
+    print(email)
     if not utils.is_valid_accessToken(token):
-        raise HTTPException(
+        return HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="User with this email already exist"
         )
-        
+    try:
+        user = crud.get_user_by_email(db, email)
+    except:
+        return HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User with this email is not found"
+        )
+    print(user.nickname, user.email, user.manner_temporature, user.create_at)
+    return user
+
+@app.post("/update_nickname/", response_model = schemas.UserProfile)
+async def update_nickname(nickname: schemas.UserNickname,
+                          token: str = Depends(oauth2_scheme),
+                          db: Session = Depends(get_db)):
+    if not utils.is_valid_accessToken(token):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Token is invalid"
+        )
+    new_nickname = nickname.new_nickname
     user = utils.get_current_user(token, db)
-    user = crud.update_user_nickname(db,user, new_nickname)
+    user = crud.update_user_nickname(db, user, new_nickname)
     return user
 
 @app.get("/items/")

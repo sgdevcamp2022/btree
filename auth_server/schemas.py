@@ -35,14 +35,12 @@ class UserBase(BaseModel):
 
     class Config:
         orm_mode = True
-
 class UserCreate(UserBase):
     password: str
 
 class Token(BaseModel):
     access_token: str
     token_type: str
-
 class email_token(BaseModel):
     token: str
 
@@ -72,6 +70,12 @@ class UserProfile(UserBase):
     nickname: Optional[str]
     manner_temporature: float
     create_at: datetime
+
+    class Config:
+        orm_mode = True
+
+class UserNickname(BaseModel):
+    new_nickname: str
 
     class Config:
         orm_mode = True

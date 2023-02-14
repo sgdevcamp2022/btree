@@ -33,6 +33,7 @@ def update_user_nickname(db: Session, user: models.User , new_nickname: str):
         user.nickname = new_nickname
         db.commit()
         db.refresh(user)
+        print(new_nickname, user.nickname)
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
