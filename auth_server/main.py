@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # from passlib.context import CryptContext
 import crud, models, schemas, utils
 from database import SessionLocal, engine
+from typing import Union
 from config import rd
 from redis_om import Migrator
 import router
@@ -139,7 +140,7 @@ async def read_profile(token: str = Depends(oauth2_scheme),
 @app.post("/update_nickname", response_model = schemas.UserProfile)
 async def update_nickname(token: str = Depends(oauth2_scheme),
                           db: Session = Depends(get_db),
-                          new_nickname: str = None):
+                          new_nickname: Union[str, None] = None):
     if not utils.is_valid_accessToken(token):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -147,7 +148,7 @@ async def update_nickname(token: str = Depends(oauth2_scheme),
         )
         
     user = utils.get_current_user(token, db)
-    user = crud.update_user_nickname(db,user, new_nickname)
+    user = crud.update_user_nickname(db, user, new_nickname)
     return user
 
 @app.get("/items/")

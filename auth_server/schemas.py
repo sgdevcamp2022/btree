@@ -42,7 +42,6 @@ class UserCreate(UserBase):
 class Token(BaseModel):
     access_token: str
     token_type: str
-
 class email_token(BaseModel):
     token: str
 
