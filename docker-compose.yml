@@ -9,6 +9,19 @@ services:
   # This task is only performed during the *initial* startup of the stack. On all
   # subsequent runs, the service simply returns immediately, without performing
   # any modification to existing users.
+  fastapi_search:
+    depends_on:
+      mysql:
+        condition: service_healthy
+    container_name: fastapi_search
+    platform: linux/x86_64
+    build: ./search_server
+    restart: always
+    tty: true
+    volumes:
+      - ./search_server:/app
+    ports:
+      - 8456:8456
   setup:
     build:
       context: setup/
