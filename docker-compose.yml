@@ -29,11 +29,29 @@ services:
       HEARTBEAT_INTERNAL_PASSWORD: ${HEARTBEAT_INTERNAL_PASSWORD:-}
       MONITORING_INTERNAL_PASSWORD: ${MONITORING_INTERNAL_PASSWORD:-}
       BEATS_SYSTEM_PASSWORD: ${BEATS_SYSTEM_PASSWORD:-}
-    networks:
-      - elk
     depends_on:
       - elasticsearch
 
+  mysql: 
+    container_name: mysql 
+    platform: linux/x86_64
+    build: ./mysql/ # Dockerfile이 존재하는 상대경로
+    restart: always
+    ports:
+      - "3306:3306" # 외부포트:내부포트
+    volumes:
+      - ./mysql/db:/docker-entrypoint-initdb.d # up되서 처음 실행할 sql문들을 모아놓은 폴더
+    environment:
+      MYSQL_DATABASE_ACCOUNT: account
+      MYSQL_DATABASE: btree_project
+      MYSQL_ROOT_HOST: 'root'
+      MYSQL_ROOT_PASSWORD: 1234
+
+    healthcheck:
+            test: ["CMD", "mysqladmin", "-u$MYSQL_ROOT_HOST", "-p$MYSQL_ROOT_PASSWORD", "ping", "-h", "localhost"]
+            timeout: 20s
+            retries: 10    
+    tty: true
   elasticsearch:
     build:
       context: elasticsearch/
@@ -55,8 +73,7 @@ services:
       # Use single node discovery in order to disable production mode and avoid bootstrap checks.
       # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
       discovery.type: single-node
-    networks:
-      - elk
+
     restart: unless-stopped
 
   logstash:
@@ -67,6 +84,8 @@ services:
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
+      - ./logstash/mysql-connector-j-8.0.31.jar:/usr/share/logstash/mysql-connector-j-8.0.31.jar
+      - ./logstash/mysql-connector-j-8.0.32.jar:/usr/share/logstash/mysql-connector-j-8.0.32.jar
     ports:
       - 5044:5044
       - 50000:50000/tcp
@@ -75,8 +94,7 @@ services:
     environment:
       LS_JAVA_OPTS: -Xms256m -Xmx256m
       LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
-    networks:
-      - elk
+
     depends_on:
       - elasticsearch
     restart: unless-stopped
@@ -92,15 +110,9 @@ services:
       - 5601:5601
     environment:
       KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
-    networks:
-      - elk
     depends_on:
       - elasticsearch
     restart: unless-stopped
-
-networks:
-  elk:
-    driver: bridge
 
 volumes:
   setup:
