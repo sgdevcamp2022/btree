@@ -18,14 +18,14 @@ data class Chat(
     @Column("room_id")
     val roomId: Long,
 
-    @Column("user_id")
-    val userId: Long,
+    @Column("user_name")
+    val username: String,
 
     @Column
     val contents: String,
 
     @Column("contents_type")
-    val contentsType: ContentsType,
+    val contentsType: ContentsType = ContentsType.TEXT,
 
     @CreatedDate
     @Column("created_at")

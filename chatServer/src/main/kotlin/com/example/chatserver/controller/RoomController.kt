@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/room")
+@RequestMapping("/chat/room")
 class RoomController(
     private val roomService: RoomService
 ) {
@@ -35,5 +35,7 @@ class RoomController(
     ): List<RoomResponse> {
         return roomService.getRooms(email)
     }
+
+    // TODO: delete room needed
 
 }

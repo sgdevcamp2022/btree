@@ -1,6 +1,10 @@
 package com.example.chatserver.model
 
+import com.example.chatserver.actor.RoomActorMsg
+import com.example.chatserver.actor.roomActor
 import com.example.chatserver.domain.entity.Room
+import kotlinx.coroutines.channels.SendChannel
+import java.util.concurrent.ConcurrentHashMap
 
 
 data class RoomRequest(
@@ -26,4 +30,14 @@ data class RoomResponse(
             )
         }
     }
+}
+
+object Rooms {
+    private val rooms: ConcurrentHashMap<Int, SendChannel<RoomActorMsg>> = ConcurrentHashMap()
+
+    fun findOrCreate(roomId: Int): SendChannel<RoomActorMsg> =
+        rooms[roomId] ?: createNewRoom(roomId)
+
+    private fun createNewRoom(roomId: Int) = roomActor(roomId)
+        .also { actor -> rooms[roomId] = actor }
 }

@@ -16,7 +16,7 @@ class WebSocketConfig {
     @InternalCoroutinesApi
     fun handleMapping(): HandlerMapping {
         val map = mapOf(
-            "/chatText" to TextHandler(),
+            "/chat/chatText" to TextHandler(),
             "/chatImage" to ImageHandler(),
             "/chatLocation" to LocationHandler()
         )
