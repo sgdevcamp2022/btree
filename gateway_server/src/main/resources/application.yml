@@ -1,0 +1,22 @@
+server:
+  port: 7080
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: auth-server
+          uri: http://localhost:8000
+          predicates:
+            - Path=/auth/**
+        - id: post-server
+          uri: http://localhost:8080
+          predicates:
+            - Path=/post/**
+        - id: chat-server
+          uri: http://localhost:8081
+          predicates:
+            - Path=/chat/**
+        - id: notification-server
+          uri: http://localhost:8082
+          predicates:
+            - Path=/notification/**
