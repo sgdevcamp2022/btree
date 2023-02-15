@@ -19,7 +19,7 @@ import java.util.Optional;
 public class boardserviceimpl implements boardservice {
 
     private final boardrepository boardrepository;
-    private final User suer;
+    private final User user;
 
     public boardpost save (boardpost boardpost){
         return boardrepository.save(boardpost);
@@ -27,6 +27,16 @@ public class boardserviceimpl implements boardservice {
 
     public List<boardresponsedto> findAllposts (PageRequest pageRequest){
         List<boardpost> posts= boardrepository.findAllByOrderByBoardpostidDesc(pageRequest).getContent();
+        List<boardresponsedto> Allposts=new ArrayList<>();
+        for (boardpost post : posts){
+            boardresponsedto boardresponsedto = responsedto(post);
+            Allposts.add(boardresponsedto);
+        }
+        return Allposts;
+    }
+
+    public List<boardresponsedto> findAllpostsbylocate (PageRequest pageRequest){
+        List<boardpost> posts= boardrepository.findByLocateContaining(pageRequest,user.getLocate()).getContent();
         List<boardresponsedto> Allposts=new ArrayList<>();
         for (boardpost post : posts){
             boardresponsedto boardresponsedto = responsedto(post);

@@ -43,6 +43,16 @@ public class salesserviceimpl implements salesserivce{
         return Allposts;
     }
 
+    public List<salesresponsedto> findAllpostsbylocate (PageRequest pageRequest){
+        List<salespost> posts= salesrepository.findByLocateContaining(pageRequest, user.getLocate()).getContent();
+        List<salesresponsedto> Allposts=new ArrayList<>();
+        for (salespost post : posts){
+            salesresponsedto salesresponsedto = responsedto(post);
+            Allposts.add(salesresponsedto);
+        }
+        return Allposts;
+    }
+
     private salesresponsedto responsedto (salespost salespost){
         return new salesresponsedto(
                 salespost.getSalespostid(),

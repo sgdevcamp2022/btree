@@ -1,4 +1,5 @@
 # fastapi default gitignore
+# fastapi default gitignore
 
 .idea
 .ipynb_checkpoints
@@ -24,3 +25,4 @@ oauth2_creds.json
 # vim temporary files
 *~
 .*.sw?
+application-aws.yml

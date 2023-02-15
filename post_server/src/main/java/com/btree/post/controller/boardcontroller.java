@@ -30,6 +30,7 @@ public class boardcontroller {
     @PostMapping//게시글 작성
     public ResponseEntity<String> createPost(@RequestBody boardrequestdto boardrequestdto){
         boardpost boardpost=boardservice.save(boardmapper.toEntity(boardrequestdto,user));
+        System.out.println(user.getLocate());
         return ResponseEntity.ok()
                 .body("게시글 작성 성공");
     }
@@ -43,7 +44,7 @@ public class boardcontroller {
     @GetMapping//게시글 목록
     public List<boardresponsedto>findAllPost(@RequestParam int page,@RequestParam int size){
         PageRequest sortByPostid=PageRequest.of(page, size, Sort.by("boardpostid").descending());
-        return boardservice.findAllposts(sortByPostid);
+        return boardservice.findAllpostsbylocate(sortByPostid);
     }
     @PutMapping("/{id}")//게시글 수정
     public void updatePost(@PathVariable Long id,@RequestBody boardrequestdto boardrequestdto){

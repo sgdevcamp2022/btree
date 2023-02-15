@@ -27,11 +27,11 @@ public class salespost {
     private String salesimg;
     @Column
     private int price;
-    @Column(columnDefinition = "Empty")
+    @Column
     private String username;
     @Column
     private String category;
-    @Column(columnDefinition = "Empty")
+    @Column
     private String locate;
     @CreationTimestamp
     @Column
