@@ -1,0 +1,187 @@
+version: '3.8'
+services:  # 컨테이너의 서비스라는것을 정의
+  # The 'setup' service runs a one-off script which initializes users inside
+  # Elasticsearch — such as 'logstash_internal' and 'kibana_system' — with the
+  # values of the passwords defined in the '.env' file.
+  #
+  # This task is only performed during the *initial* startup of the stack. On all
+  # subsequent runs, the service simply returns immediately, without performing
+  # any modification to existing users.
+  fastapi_search:
+    depends_on:
+      mysql:
+        condition: service_healthy
+    container_name: fastapi_search
+    platform: linux/x86_64
+    build: ./elk/search_server
+    restart: always
+    tty: true
+    volumes:
+      - ./elk/search_server:/app
+    ports:
+      - 8456:8456
+  setup:
+    build:
+      context: elk/setup/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    init: true
+    volumes:
+      - ./elk/setup/entrypoint.sh:/entrypoint.sh:ro,Z
+      - ./elk/setup/helpers.sh:/helpers.sh:ro,Z
+      - ./elk/setup/roles:/roles:ro,Z
+      - ./elk/setup:/state:Z
+    environment:
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+      METRICBEAT_INTERNAL_PASSWORD: ${METRICBEAT_INTERNAL_PASSWORD:-}
+      FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
+      HEARTBEAT_INTERNAL_PASSWORD: ${HEARTBEAT_INTERNAL_PASSWORD:-}
+      MONITORING_INTERNAL_PASSWORD: ${MONITORING_INTERNAL_PASSWORD:-}
+      BEATS_SYSTEM_PASSWORD: ${BEATS_SYSTEM_PASSWORD:-}
+    depends_on:
+      - elasticsearch
+
+  elasticsearch:
+    build:
+      context: elk/elasticsearch/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    volumes:
+      - ./elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
+      - ./elk/elasticsearch:/usr/share/elasticsearch/data:Z
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      node.name: elasticsearch
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      # Bootstrap password.
+      # Used to initialize the keystore during the initial startup of
+      # Elasticsearch. Ignored on subsequent runs.
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks.
+      # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      discovery.type: single-node
+
+    restart: unless-stopped
+
+  logstash:
+    build:
+      context: elk/logstash/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    volumes:
+      - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
+      - ./elk/logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
+      - ./elk/logstash/mysql-connector-j-8.0.31.jar:/usr/share/logstash/mysql-connector-j-8.0.31.jar
+      - ./elk/logstash/mysql-connector-j-8.0.32.jar:/usr/share/logstash/mysql-connector-j-8.0.32.jar
+    ports:
+      - 5044:5044
+      - 50000:50000/tcp
+      - 50000:50000/udp
+      - 9600:9600
+    environment:
+      LS_JAVA_OPTS: -Xms256m -Xmx256m
+      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
+
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
+  kibana:
+    build:
+      context: elk/kibana/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    volumes:
+      - ./elk/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
+    ports:
+      - 5601:5601
+    environment:
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
+  mysql: 
+    container_name: mysql 
+    platform: linux/x86_64
+    build: ./mysql/ # Dockerfile이 존재하는 상대경로
+    restart: always
+    ports:
+      - "3306:3306" # 외부포트:내부포트
+    volumes:
+      - ./mysql/db:/docker-entrypoint-initdb.d # up되서 처음 실행할 sql문들을 모아놓은 폴더
+    environment:
+      MYSQL_DATABASE_ACCOUNT: account
+      MYSQL_DATABASE: btree_project
+      MYSQL_ROOT_HOST: 'root'
+      MYSQL_ROOT_PASSWORD: 1234    
+    healthcheck:
+            test: ["CMD", "mysqladmin", "-u$MYSQL_ROOT_HOST", "-p$MYSQL_ROOT_PASSWORD", "ping", "-h", "localhost"]
+            timeout: 20s
+            retries: 10    
+    tty: true
+  fastapi:
+    depends_on:
+      mysql:
+        condition: service_healthy
+    container_name: fast_api
+    platform: linux/x86_64
+    build: ./auth_server
+    restart: always
+    tty: true
+    volumes:
+      - ./auth_server:/app
+    ports:
+      - 8000:8000
+    environment:
+      - DATABASE_USERNAME=root
+      - DATABASE_PASSWORD=1234
+      - DATABASE=account
+      - DATABASE_HOST=mysql
+      - REDIS_OM_URL=redis://redis:6379
+  redis:
+    image: redis:latest  # image: [이미지명]:[태그명]
+    container_name: redis_fastapi_db
+    hostname: redis
+    ports:
+      - 6379:6379
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis_ui
+    hostname: redis-commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+      - HTTP_USER=admin
+      - HTTP_PASSWORD=dlatl
+    ports:
+      - 8081:8081
+    depends_on:
+      - redis
+
+  application:
+    restart: unless-stopped
+    container_name: post_server
+    build:
+      context: ./post_server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/btree_project?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "1234"
+    depends_on:
+      mysql:
+        condition: service_healthy
+   
+volumes:
+  redis-data:
+  setup:
+  elasticsearch:
