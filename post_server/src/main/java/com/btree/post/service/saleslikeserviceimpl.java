@@ -5,9 +5,10 @@ import com.btree.post.entity.salespost;
 import com.btree.post.repository.saleslikerepository;
 import com.btree.post.repository.salesrepository;
 import com.btree.post.util.User;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor

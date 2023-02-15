@@ -1,18 +1,15 @@
 package com.btree.post.entity;
 
 import com.btree.post.dto.boardrequestdto;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.CurrentTimestamp;
+
 import org.hibernate.annotations.UpdateTimestamp;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
-import static com.btree.post.entity.salesstate.SALE;
 
 @Getter
 @AllArgsConstructor
@@ -34,7 +31,6 @@ public class boardpost {
     @Column
     @ColumnDefault("0")
     private int commentnum;
-    @CreationTimestamp
     @UpdateTimestamp
     @Column(name="updatetime",nullable = false, insertable = false,columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @NotNull

@@ -5,7 +5,8 @@ import com.btree.post.entity.boardpost;
 import com.btree.post.repository.boardlikerepository;
 import com.btree.post.repository.boardrepository;
 import com.btree.post.util.User;
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

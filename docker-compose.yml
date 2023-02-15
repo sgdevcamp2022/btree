@@ -105,8 +105,8 @@ services:  # 컨테이너의 서비스라는것을 정의
       - elasticsearch
     restart: unless-stopped
 
-  mysql:
-    container_name: mysql
+  mysql: 
+    container_name: mysql 
     platform: linux/x86_64
     build: ./mysql/ # Dockerfile이 존재하는 상대경로
     restart: always
@@ -118,11 +118,11 @@ services:  # 컨테이너의 서비스라는것을 정의
       MYSQL_DATABASE_ACCOUNT: account
       MYSQL_DATABASE: btree_project
       MYSQL_ROOT_HOST: 'root'
-      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: 1234    
     healthcheck:
             test: ["CMD", "mysqladmin", "-u$MYSQL_ROOT_HOST", "-p$MYSQL_ROOT_PASSWORD", "ping", "-h", "localhost"]
             timeout: 20s
-            retries: 10
+            retries: 10    
     tty: true
   fastapi:
     depends_on:
@@ -180,7 +180,7 @@ services:  # 컨테이너의 서비스라는것을 정의
     depends_on:
       mysql:
         condition: service_healthy
-
+   
 volumes:
   redis-data:
   setup:

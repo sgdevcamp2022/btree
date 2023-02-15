@@ -1,15 +1,12 @@
 package com.btree.post.service;
 
-import com.btree.post.dto.commentrequestdto;
+
 import com.btree.post.entity.boardcomment;
-import com.btree.post.entity.boardpost;
 import com.btree.post.repository.boardrepository;
 import com.btree.post.repository.commentrepository;
-import com.btree.post.util.User;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service

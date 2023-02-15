@@ -1,12 +1,12 @@
 package com.btree.post.dto;
 
-import jakarta.persistence.Column;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.sql.Timestamp;
 
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -25,7 +25,7 @@ public class boardresponsedto {
 
     private int commentnum;
 
-    private LocalDateTime updatetime;
+    private Timestamp updatetime;
 
     private String locate;
 }

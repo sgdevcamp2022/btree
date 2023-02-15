@@ -1,7 +1,7 @@
 package com.btree.post.entity;
 
 import com.btree.post.dto.salesrequestdto;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;

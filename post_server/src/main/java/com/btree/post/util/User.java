@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 public class User {
 
     private String username;
+    @Builder.Default
     private boolean gpsauth=false;
     private String locate;
 
