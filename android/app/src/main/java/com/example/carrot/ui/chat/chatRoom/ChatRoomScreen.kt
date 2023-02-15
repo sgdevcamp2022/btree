@@ -96,7 +96,7 @@ fun MyChat(
 fun MyChatPreview() {
     CarrotTheme {
         Surface {
-            MyChat(chat = SampleData.sampleChatRoom[2].chatList[3])
+
         }
     }
 }

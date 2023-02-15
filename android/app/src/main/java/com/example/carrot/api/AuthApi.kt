@@ -8,26 +8,26 @@ import retrofit2.http.*
 
 interface AuthApi {
 
-    @POST("/register")
+    @POST("/auth/register")
     suspend fun signUp(@Body signUpRequest: SignUpRequest):Response<SignUpResponse>
 
-    @POST("/email_verify")
+    @POST("/auth/email_verify")
     suspend fun sendVerificationEmail(@Body email: String):Response<EmailVerifResponse>
 
     @FormUrlEncoded
-    @POST("/token")
+    @POST("/auth/token")
     suspend fun login(
         @Field("username") username: String,
         @Field("password") password: String
     ):Response<LogInResponse>
 
 
-    @GET("/profile")
+    @GET("/auth/profile/")
     suspend fun getMyInfo(
         @Header("Authorization") token: String
     ):Response<GetMyInfoResponse>
 
-    @POST("/update_nickname")
+    @POST("/auth/update_nickname/")
     suspend fun changeNickname(
         @Header("Authorization") token: String,
         @Body new_nickname: ChangeNicknameRequest
