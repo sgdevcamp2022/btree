@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface salesrepository extends JpaRepository<salespost,Long> {
    Page<salespost> findAllByOrderBySalespostidDesc(Pageable pageable);
 
+   Page<salespost> findByLocateContaining(Pageable pageable,String keyword);
+
    @Modifying
    @Query("update salespost a set a.likenum = a.likenum - 1 where a.salespostid = :id")
    void minusLike (@Param("id") Long id);

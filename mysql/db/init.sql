@@ -55,7 +55,7 @@ create table boardpost
     likenum     int default 0 null,
     locate      varchar(255)  null,
     title       varchar(255)  null,
-    updatetime  datetime(6)   null,
+    updatetime  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     username    varchar(255)  null
 );
 

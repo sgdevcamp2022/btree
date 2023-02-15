@@ -2,13 +2,14 @@ package com.btree.post.entity;
 
 import com.btree.post.dto.boardrequestdto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.CurrentTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.jetbrains.annotations.NotNull;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import static com.btree.post.entity.salesstate.SALE;
@@ -34,8 +35,10 @@ public class boardpost {
     @ColumnDefault("0")
     private int commentnum;
     @CreationTimestamp
-    @Column
-    private LocalDateTime updatetime;
+    @UpdateTimestamp
+    @Column(name="updatetime",nullable = false, insertable = false,columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @NotNull
+    private Timestamp updatetime;
     @Column
     private String locate;
     @Column
@@ -43,7 +46,7 @@ public class boardpost {
     private int likenum;
 
     @Builder
-    public boardpost(Long boardpostid, String title, String content, String contentimg, String username, int commentnum, LocalDateTime updatetime, String locate) {
+    public boardpost(Long boardpostid, String title, String content, String contentimg, String username, int commentnum, Timestamp updatetime, String locate) {
         this.boardpostid = boardpostid;
         this.title = title;
         this.content = content;

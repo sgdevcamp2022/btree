@@ -14,6 +14,7 @@ import java.util.List;
 public interface boardrepository extends JpaRepository<boardpost,Long> {
     Page<boardpost> findAllByOrderByBoardpostidDesc(Pageable pageable);
 
+    Page<boardpost> findByLocateContaining(Pageable pageable,String keyword);
     @Modifying
     @Query("update boardpost a set a.likenum = a.likenum - 1 where a.boardpostid = :id")
     void minusLike (@Param("id") Long id);

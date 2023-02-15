@@ -26,14 +26,15 @@ public class salescontroller {
     private final User user;
 
     @PostMapping//게시글 작성
-    public ResponseEntity<String> createPost (salesrequestdto salesrequestdto){
+    public ResponseEntity<String> createPost (@RequestBody salesrequestdto salesrequestdto){
         salespost salespost = saleservice.save(salesmapper.toEntity(salesrequestdto,user));
+        System.out.println(user.getLocate());
         return ResponseEntity.ok()
                 .body("게시글 작성 성공");
     }
 
     @GetMapping("/{id}") //상세 페이지 조회
-    public ResponseEntity<salesresponsedto> detailPost (@PathVariable("id") int postid, User user){
+    public ResponseEntity<salesresponsedto> detailPost (@PathVariable("id") int postid){
         salespost post = saleservice.findById((long) postid);
         salesresponsedto salesresponsedto = salesmapper.fromEntity(post);
         return ResponseEntity.ok()
@@ -43,7 +44,7 @@ public class salescontroller {
     @GetMapping// 게시글 목록
     public List<salesresponsedto> findAllPost (@RequestParam int page, @RequestParam int size){
         PageRequest sortByPostid = PageRequest.of(page, size, Sort.by("salespostid").descending());
-        return saleservice.findAllposts(sortByPostid);
+        return saleservice.findAllpostsbylocate(sortByPostid);
     }
 
     @PutMapping("/{id}") // 게시글 수정

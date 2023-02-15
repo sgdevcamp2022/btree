@@ -1,11 +1,6 @@
 package com.btree.post.util;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import lombok.*;
 import org.springframework.stereotype.Service;
 
 
@@ -14,17 +9,20 @@ import org.springframework.stereotype.Service;
 @NoArgsConstructor
 @Service
 @Setter
+@Builder
 public class User {
 
     private String username;
-
+    private boolean gpsauth=false;
     private String locate;
+
 
     @Override
     public String toString() {
-        return "userutil{" +
+        return "User{" +
                 "username='" + username + '\'' +
-                ", userlocate='" + locate + '\'' +
+                ", gpsauth=" + gpsauth +
+                ", locate='" + locate + '\'' +
                 '}';
     }
 }
