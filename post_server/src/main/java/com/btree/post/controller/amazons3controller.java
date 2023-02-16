@@ -18,7 +18,7 @@ public class amazons3controller {
     private final imageserviceimpl imageservice;
 
     @PostMapping(value = "/upload",consumes = "multipart/*")
-    public ResponseEntity<List<String>> uploadimage(@RequestPart("files") List<MultipartFile> multipartFile){
+    public ResponseEntity<List<String>> uploadimage(@RequestPart("files") List<MultipartFile> multipartFile) throws IOException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(imageservice.uploadFile(multipartFile));
     }
@@ -32,7 +32,6 @@ public class amazons3controller {
 
     @GetMapping("/download")
     public ResponseEntity<byte[]> downloadimage(String fileurl) throws IOException{
-        String filepath =fileurl.substring(52);
-        return imageservice.download(filepath);
+        return imageservice.download(fileurl);
     }
 }
