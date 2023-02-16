@@ -1,7 +1,9 @@
 package com.example.carrot.ui.chat.chatRoom
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
@@ -27,7 +29,10 @@ fun ChattingRoomCard(
     chattingRoom: ChatRoom,
     navigateToChattingRoom: (chattingRoomId: Long) -> Unit
 ){
-    Column {
+    Column(
+        modifier = Modifier
+            .clickable { Log.i("CHATROOM", "roomId : ${chattingRoom.chattingRoomId}") }
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
