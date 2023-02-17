@@ -44,9 +44,9 @@ class Token(BaseModel):
 class email_token(BaseModel):
     token: str
 
-class RefreshIncludedToken(Token):
-    refresh_token: str
 
+class RefreshToken(BaseModel):
+    refresh_token: str
 class TokenData(BaseModel):
     email: Union[str, None] = None
 
