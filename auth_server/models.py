@@ -14,6 +14,8 @@ class User(Base):
     manner_temporature = Column(Float(precision=2, asdecimal=True), default=36.5)
     is_active = Column(Boolean, default=False)
     create_at = Column(DateTime, default=datetime.datetime.utcnow)
+    gps_auth = Column(Boolean, default=False)
+    locate = Column(String(100), nullable = True)
 
     items = relationship("Item", back_populates="owner")#
 

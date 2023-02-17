@@ -68,9 +68,10 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"refresh_token": refresh_token, "access_token" : access_token, "token_type" : "bearer"}
 
 @app.post("/generate_access_token/", response_model=schemas.Token)
-async def re_issue_access_token(token: str = Depends(oauth2_scheme), # access_token
-                                refresh_token: str = None,
+async def re_issue_access_token(refresh: schemas.RefreshToken,
+                                token: str = Depends(oauth2_scheme), # access_token                                
                                 db: Session = Depends(get_db)):
+    refresh_token = refresh.refresh_token
     if not utils.is_valid_accessToken(token):
         if rd.exists(refresh_token):
             userId = rd.get(refresh_token)
