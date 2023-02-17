@@ -57,7 +57,7 @@ fun CarrotApp(
             )
         },
         bottomBar = {
-            if(authenticateViewModel.authenticated.value){
+            if(authenticateViewModel.authenticated.value && authenticateViewModel.bottomBarToggle.value){
                 BottomNavBar(navController = navController)
             }
         },

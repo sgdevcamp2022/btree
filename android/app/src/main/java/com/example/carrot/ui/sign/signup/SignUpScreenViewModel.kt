@@ -3,8 +3,9 @@ package com.example.carrot.ui.sign.signup
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.carrot.api.RetrofitClient.apiService
+import com.example.carrot.api.RetrofitClient.authApiService
 import com.example.carrot.model.SignUpRequest
+import com.example.carrot.model.SignUpResponse
 
 class SignUpScreenViewModel(): ViewModel() {
     private val _email = mutableStateOf("ssk56545442@gmail.com")
@@ -48,7 +49,7 @@ class SignUpScreenViewModel(): ViewModel() {
         )
 
         try {
-            val registerResponse = apiService.signUp(signUpRequest = signUpRequest)
+            val registerResponse = authApiService.signUp(signUpRequest = signUpRequest)
             when (registerResponse.code()){
                 200 -> {
                     Log.i("SIGNUP", "sign up result : ${registerResponse.body()?.email}")
@@ -56,8 +57,8 @@ class SignUpScreenViewModel(): ViewModel() {
                         title = "성공",
                         content = "이메일에서 인증메일을 확인 후, 로그인창으로 이동해서 로그인을 해주세요."
                     )
-                    setDialogToggle()
                     emailVerification()
+                    setDialogToggle()
                 }
                 400 -> {
                     Log.i("SIGNUP", "email already using")
@@ -76,9 +77,15 @@ class SignUpScreenViewModel(): ViewModel() {
         }
     }
 
-    suspend fun emailVerification(){
+    private suspend fun emailVerification(){
         try {
-            val emailVerification = apiService.sendVerificationEmail(email = email.value)
+            val emailVerification = authApiService.sendVerificationEmail(
+                signUpResponse = SignUpResponse(email.value)
+            )
+            when(emailVerification.body()?.status){
+                "SUCCESS" -> Log.i("SIGNUP", "verification mail has sent")
+                else -> Log.i("SIGNUP", "verification mail failed, ${emailVerification.code()}")
+            }
         } catch(e: Exception) {
             Log.i("SIGNUP", "email verification failed : $e")
         }

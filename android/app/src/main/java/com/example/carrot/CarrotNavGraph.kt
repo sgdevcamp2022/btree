@@ -20,7 +20,10 @@ import com.example.carrot.ui.sign.AuthAction
 import com.example.carrot.ui.sign.authNavGraph
 
 @Composable
-fun CarrotNavGraph(navController: NavHostController = rememberNavController(), authenticateViewModel: AuthenticateViewModel) {
+fun CarrotNavGraph(
+    navController: NavHostController = rememberNavController(),
+    authenticateViewModel: AuthenticateViewModel
+) {
 
     val homeAction = remember(navController){ HomeAction(navController) }
     val communityAction = remember(navController){ CommunityAction(navController) }
@@ -28,7 +31,7 @@ fun CarrotNavGraph(navController: NavHostController = rememberNavController(), a
     val authAction = remember(navController){AuthAction(navController)}
 
     NavHost(navController = navController, startDestination = AUTH_ROUTER.toString() ){
-        homeNavGraph(navController = navController, homeAction = homeAction)
+        homeNavGraph(navController = navController, homeAction = homeAction, toggleMainBottomBar = authenticateViewModel.toggleMainBottomBar)
         communityNavGraph(navController = navController, communityAction = communityAction)
         chatNavGraph(navController = navController, chatAction = chatAction)
         myPageNavGraph(navController = navController)

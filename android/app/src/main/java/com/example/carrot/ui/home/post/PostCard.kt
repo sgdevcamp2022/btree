@@ -1,5 +1,6 @@
 package com.example.carrot.ui.home.post
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,13 +18,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.carrot.R
 import com.example.carrot.model.SalePost
+import com.example.carrot.model.SalePostResponse
 import com.example.carrot.model.SampleData
 import com.example.carrot.ui.theme.*
+import java.time.Duration
+import java.time.LocalDateTime
 
 @Composable
 fun PostCard(
-    post: SalePost,
+    post: SalePostResponse,
     navigateToPost: (Long) -> Unit
 ){
     Column(
@@ -32,10 +37,11 @@ fun PostCard(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.clickable { navigateToPost(post.postId) }
+            modifier = Modifier.clickable { navigateToPost(post.salePostId) }
         ) {
             Image(
-                painter = painterResource(post.titleImage),
+                // TODO: CHANGE PICTURE WITH S3
+                painter = painterResource(R.drawable.testpic),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -53,15 +59,17 @@ fun PostCard(
                 Row {
                     Text(text = post.location, style=MaterialTheme.typography.labelSmall, color = Grey160)
                     Text(text = "-", style=MaterialTheme.typography.labelSmall, color = Grey160)
-                    Text(text = "${post.createdAt} 분 전", style=MaterialTheme.typography.labelSmall, color = Grey160)
+                    val postTime = calculateTime(postTime = post.updatedAt)
+//                    Text(text = "${post.updatedAt} 분 전", style=MaterialTheme.typography.labelSmall, color = Grey160)
+                    Text(text = postTime, style=MaterialTheme.typography.labelSmall, color = Grey160)
                 }
                 Text(text = "${post.price}원", style = MaterialTheme.typography.titleSmall)
                 Row(modifier = Modifier
                     .height(16.dp)
                     .fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                    if (post.contactNum > 0) {
+                    if (post.chatNum > 0) {
                         Icon(imageVector = Icons.Outlined.Chat, contentDescription = "Chat", tint = Grey160)
-                        Text(text = " ${post.contactNum} ", style = MaterialTheme.typography.bodySmall, color = Grey160)
+                        Text(text = " ${post.chatNum} ", style = MaterialTheme.typography.bodySmall, color = Grey160)
                     }
                     if (post.likeNum > 0){
                         Icon(imageVector = Icons.Outlined.FavoriteBorder, contentDescription = "Favorite", tint = Grey160)
@@ -80,15 +88,29 @@ fun PostCard(
     }
 }
 
-@Preview("postcard test")
-@Composable
-fun PreviewPostCard(){
-    CarrotTheme {
-        Surface {
-            PostCard(
-                post = SampleData.sampleSalePost[1],
-                navigateToPost = {}
-            )
-        }
-    }
+fun calculateTime(postTime: String): String{
+    val now = LocalDateTime.now()
+    val duration = Duration.between(
+        LocalDateTime.parse(postTime),
+        now
+    )
+    Log.i("TIME", "post time : $postTime")
+    Log.i("TIME", "now : $now")
+    Log.i("TIME", "hours : ${duration.toHours()}")
+    Log.i("TIME", "minutes : ${duration.toMinutes()}")
+    Log.i("TIME", "seconds : ${duration.seconds}")
+    return duration.toMinutes().toString()
 }
+
+//@Preview("postcard test")
+//@Composable
+//fun PreviewPostCard(){
+//    CarrotTheme {
+//        Surface {
+//            PostCard(
+//                post = null,
+//                navigateToPost = {}
+//            )
+//        }
+//    }
+//}

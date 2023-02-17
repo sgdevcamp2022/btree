@@ -12,7 +12,7 @@ interface AuthApi {
     suspend fun signUp(@Body signUpRequest: SignUpRequest):Response<SignUpResponse>
 
     @POST("/auth/email_verify")
-    suspend fun sendVerificationEmail(@Body email: String):Response<EmailVerifResponse>
+    suspend fun sendVerificationEmail(@Body signUpResponse: SignUpResponse):Response<EmailVerifResponse>
 
     @FormUrlEncoded
     @POST("/auth/token")
@@ -20,7 +20,6 @@ interface AuthApi {
         @Field("username") username: String,
         @Field("password") password: String
     ):Response<LogInResponse>
-
 
     @GET("/auth/profile/")
     suspend fun getMyInfo(

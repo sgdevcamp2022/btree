@@ -11,12 +11,17 @@ object RetrofitClient {
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
     }
-    val apiService: AuthApi by lazy {
+    val authApiService: AuthApi by lazy {
         retrofit.build()
             .create(AuthApi::class.java)
     }
     val chatApiService: ChatApi by lazy {
         retrofit.build()
             .create(ChatApi::class.java)
+    }
+
+    val SalePostApiService: SalePostApi by lazy {
+        retrofit.build()
+            .create(SalePostApi::class.java)
     }
 }

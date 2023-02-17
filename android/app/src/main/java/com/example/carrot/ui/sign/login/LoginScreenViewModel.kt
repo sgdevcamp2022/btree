@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.carrot.api.RetrofitClient.apiService
+import com.example.carrot.api.RetrofitClient.authApiService
 import com.example.carrot.model.TokenStore
 
 class LoginScreenViewModel(): ViewModel() {
@@ -31,7 +31,7 @@ class LoginScreenViewModel(): ViewModel() {
         val tokenStore = TokenStore(context)
 
         try {
-            val logInResponse = apiService.login(username = email.value, password = password.value)
+            val logInResponse = authApiService.login(username = email.value, password = password.value)
 
             val accessToken = logInResponse.body()?.access_token!!
             val refreshToken = logInResponse.body()?.refresh_token!!
@@ -53,7 +53,7 @@ class LoginScreenViewModel(): ViewModel() {
         tokenStore.getAccessToken.collect{
             Log.i("MY INFO", "my info access_token : $it")
             try {
-                val myInfo = apiService.getMyInfo("Bearer $it")
+                val myInfo = authApiService.getMyInfo("Bearer $it")
                 Log.i("MY INFO", "my info : ${myInfo.body()?.nickname}")
 
                 if (myInfo.body()?.nickname == null){

@@ -4,10 +4,9 @@ import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.carrot.api.RetrofitClient.apiService
+import com.example.carrot.api.RetrofitClient.authApiService
 import com.example.carrot.model.ChangeNicknameRequest
 import com.example.carrot.model.TokenStore
-import kotlinx.coroutines.flow.collect
 
 class FirstEntranceScreenViewModel(): ViewModel() {
 
@@ -25,7 +24,7 @@ class FirstEntranceScreenViewModel(): ViewModel() {
         val tokenStore = TokenStore(context)
         tokenStore.getAccessToken.collect{
             try {
-                val changeNicknameResponse = apiService.changeNickname(
+                val changeNicknameResponse = authApiService.changeNickname(
                     token = "Bearer $it",
                     new_nickname = ChangeNicknameRequest(new_nickname = _nickname.value)
                 )

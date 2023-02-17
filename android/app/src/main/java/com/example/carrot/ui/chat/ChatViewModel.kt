@@ -4,11 +4,10 @@ import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import com.example.carrot.api.RetrofitClient.apiService
+import com.example.carrot.api.RetrofitClient.authApiService
 import com.example.carrot.api.RetrofitClient.chatApiService
 import com.example.carrot.model.ChatRoom
 import com.example.carrot.model.TokenStore
-import kotlinx.coroutines.flow.collect
 
 class ChatViewModel(
 
@@ -41,7 +40,7 @@ class ChatViewModel(
 
     suspend fun getEmail(token: String): String{
         try {
-            return apiService.getMyInfo("Bearer $token").body()?.email!!
+            return authApiService.getMyInfo("Bearer $token").body()?.email!!
         } catch (e: Exception) {
             Log.e("CHATROOM", "can't get my info : $e")
             return ""

@@ -17,7 +17,11 @@ import com.example.carrot.ui.destinations.HomeNavDestination.HOME_ROUTE
 import com.example.carrot.ui.sign.firstEntrance.FirstEntranceScreen
 import com.example.carrot.ui.sign.signup.SignUpScreen
 
-fun NavGraphBuilder.authNavGraph(navController: NavHostController, authAction: AuthAction, authenticateViewModel: AuthenticateViewModel){
+fun NavGraphBuilder.authNavGraph(
+    navController: NavHostController,
+    authAction: AuthAction,
+    authenticateViewModel: AuthenticateViewModel
+){
     navigation(startDestination = ANNOUNCEMENT_SCREEN, route = AUTH_ROUTER.toString()) {
         composable(ANNOUNCEMENT_SCREEN){
             AnnouncementScreen(
