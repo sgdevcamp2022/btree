@@ -1,6 +1,6 @@
 package com.btree.post.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +15,6 @@ public class saleslike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long saleslikeid;
-
     @Column
     private Long postid;
     @Column
