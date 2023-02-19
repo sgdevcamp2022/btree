@@ -15,7 +15,6 @@ public class saleslike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long saleslikeid;
-
     @Column
     private Long postid;
     @Column
