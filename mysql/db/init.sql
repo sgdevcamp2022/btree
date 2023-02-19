@@ -31,7 +31,7 @@ create table salespost
     username    varchar(50)  null,
     category    varchar(50)  null,
     locate      varchar(100) null,
-    updatetime  datetime     null,
+    updatetime  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     likenum     int          null,
     chatnum     int          null,
     ispoststate varchar(255) null
@@ -66,5 +66,8 @@ create table boardlike
     postid      bigint       null,
     username    varchar(255) null
 );
+
+ALTER DATABASE btree_project CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+ALTER TABLE salespost CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 
