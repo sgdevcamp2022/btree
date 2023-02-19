@@ -22,13 +22,13 @@ interface SalePostApi {
         @Path("id") postId: Long
     ) : Response<SalePostResponse>
 
-    @PUT("/post/api/posts/")
+    @PUT("/post/api/posts/{postId}")
     suspend fun updateSalePostDetail(
         @Path("postId") postId: Long,
         @Body salePostRequest: SalePostRequest
     ) : Response<Unit>
 
-    @DELETE("/post/api/posts/")
+    @DELETE("/post/api/posts/{postId}")
     suspend fun deleteSalePost(
         @Path("postId") postId: Long
     ): Response<Unit>

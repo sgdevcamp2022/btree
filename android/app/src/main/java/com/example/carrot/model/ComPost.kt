@@ -1,5 +1,7 @@
 package com.example.carrot.model
 
+import com.google.gson.annotations.SerializedName
+
 data class ComPost(
     val postId: Long,
     val writer: User = SampleData.sampleUser[0],
@@ -18,7 +20,28 @@ data class ComPost(
     """.trimIndent()
 )
 
+data class ComPostResponse(
+    @SerializedName("boardpostid")
+    val comPostId: Long,
+    val title: String,
+    val username: String,
+    val content: String,
+    val commentNum: Int,
+    @SerializedName("locate")
+    val location: String,
+    @SerializedName("contentimg")
+    val contentImg: String,
+    @SerializedName("updatetime")
+    val updatedAt: String,
+)
 
+data class ComPostRequest(
+    val title: String,
+    val content: String,
+    @SerializedName("contentimg")
+    val contentImg: String,
+    val username: String
+)
 //data class ComPost(
 //    val postId: Long,
 //    val writer: User,

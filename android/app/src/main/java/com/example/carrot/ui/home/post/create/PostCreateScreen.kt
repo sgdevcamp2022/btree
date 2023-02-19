@@ -57,16 +57,24 @@ fun PostCreateScreenTopAppBar(
         }
         ,
         actions = {
-            TextButton(onClick = {
-                GlobalScope.launch {
-                    postCreateViewModel.createSalePost()
-                }
-                onCancel()
-                toggleMainBottomBar()
-            }) {
+            TextButton(
+                onClick = {
+                    GlobalScope.launch {
+                        postCreateViewModel.createSalePost()
+                    }
+                    onCancel()
+                    toggleMainBottomBar()
+                },
+                enabled = with(postCreateViewModel){
+                    title.value != "" && contents.value != "" && price.value != ""
+                },
+                colors = ButtonDefaults.textButtonColors(
+                    disabledContentColor = Grey210,
+                    contentColor = Carrot
+                )
+            ) {
                 Text(
-                    text = "완료",
-                    color = Carrot
+                    text = "완료"
                 )
             }
             Spacer(modifier = Modifier.width(16.dp))
@@ -81,8 +89,8 @@ fun PostCreateScreenTopAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostCreateScreen(
-    onCancel: () -> Unit,
     postCreateViewModel: PostCreateViewModel = PostCreateViewModel(),
+    onCancel: () -> Unit,
     toggleMainBottomBar: () -> Unit
 ) {
     LaunchedEffect(Unit){

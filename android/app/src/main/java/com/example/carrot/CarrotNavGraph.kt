@@ -32,7 +32,7 @@ fun CarrotNavGraph(
 
     NavHost(navController = navController, startDestination = AUTH_ROUTER.toString() ){
         homeNavGraph(navController = navController, homeAction = homeAction, toggleMainBottomBar = authenticateViewModel.toggleMainBottomBar)
-        communityNavGraph(navController = navController, communityAction = communityAction)
+        communityNavGraph(navController = navController, communityAction = communityAction, toggleMainBottomBar = authenticateViewModel.toggleMainBottomBar)
         chatNavGraph(navController = navController, chatAction = chatAction)
         myPageNavGraph(navController = navController)
         // TODO: ADD NOTIFICATION ROUTE, LOCATION ROUTE

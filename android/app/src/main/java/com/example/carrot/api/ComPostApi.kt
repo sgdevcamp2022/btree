@@ -1,22 +1,26 @@
 package com.example.carrot.api
 
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
+import com.example.carrot.model.ComPostRequest
+import com.example.carrot.model.ComPostResponse
+import retrofit2.Response
+import retrofit2.http.*
 
 interface ComPostApi {
     @GET("/post/api/board")
-    suspend fun getComPostList()
+    suspend fun getComPostList(
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): Response<List<ComPostResponse>>
 
     @POST("/post/api/board")
-    suspend fun createComPost()
+    suspend fun createComPost(
+        @Body comPostRequest: ComPostRequest
+    ): Response<Unit>
 
-    @POST("/post/api/board")
-    suspend fun likeComPost()
-
-    @GET("/post/api/board")
-    suspend fun getComPostDetail()
+    @GET("/post/api/board/{id}")
+    suspend fun getComPostDetail(
+        @Path("id") postId: Long
+    ): Response<ComPostResponse>
 
     @PUT("/post/api/board")
     suspend fun updateComPostDetail()
@@ -29,4 +33,7 @@ interface ComPostApi {
 
     @DELETE("/post/api/board/comment")
     suspend fun deleteComPostComment()
+
+    @POST("/post/api/board")
+    suspend fun likeComPost()
 }

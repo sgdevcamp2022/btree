@@ -1,14 +1,10 @@
 package com.example.carrot.ui.home
 
-import android.util.Log
 import androidx.navigation.*
 import androidx.navigation.compose.composable
-import com.example.carrot.model.SampleData
-import com.example.carrot.ui.destinations.HomeNavDestination
 import com.example.carrot.ui.destinations.HomeNavDestination.HOME_ROUTE
 import com.example.carrot.ui.destinations.HomeNavDestination.HOME_ROUTER
 import com.example.carrot.ui.destinations.HomeNavDestination.POST_CREATE_ROUTE
-import com.example.carrot.ui.destinations.HomeNavDestination.POST_ID
 import com.example.carrot.ui.destinations.HomeNavDestination.POST_ROUTE
 import com.example.carrot.ui.home.post.create.PostCreateScreen
 import com.example.carrot.ui.home.post.detail.PostDetailScreen
