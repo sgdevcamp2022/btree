@@ -10,7 +10,8 @@ public class boardMapper {
     public boardpost toEntity(boardrequestdto boardrequestdto, User user){
         return boardpost.builder()
                 .title(boardrequestdto.getTitle())
-                .username(user.getUsername())
+                .useremail(user.getUseremail())
+                .nickname(user.getNickname())
                 .content(boardrequestdto.getContent())
                 .contentimg(boardrequestdto.getContentimg())
                 .locate(user.getLocate())
@@ -23,10 +24,12 @@ public class boardMapper {
                 .boardpostid(boardpost.getBoardpostid())
                 .content(boardpost.getContent())
                 .contentimg(boardpost.getContentimg())
-                .username(boardpost.getUsername())
+                .useremail(boardpost.getUseremail())
                 .commentnum(boardpost.getCommentnum())
                 .updatetime(boardpost.getUpdatetime())
                 .locate(boardpost.getLocate())
+                .likenum(boardpost.getLikenum())
+                .viewcount(boardpost.getViewcount())
                 .build();
     }
 

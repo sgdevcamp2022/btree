@@ -7,25 +7,31 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/s3")
+@RequestMapping("/api/s3")
 public class amazons3controller {
 
     private final imageserviceimpl imageservice;
 
-    @PostMapping("/image")
-    public ResponseEntity<List<String>> uploadimage(@RequestPart List<MultipartFile> multipartFile){
+    @PostMapping(value = "/upload",consumes = "multipart/*")
+    public ResponseEntity<List<String>> uploadimage(@RequestPart("files") List<MultipartFile> multipartFile) throws IOException {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(imageservice.uploadFile(multipartFile));
     }
 
-    @DeleteMapping("/image")
+    @DeleteMapping
     public ResponseEntity<Void> deleteimage(@RequestParam String fileName){
         imageservice.deleteFile(fileName);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(null);
+    }
+
+    @GetMapping("/download")
+    public ResponseEntity<byte[]> downloadimage(String fileurl) throws IOException{
+        return imageservice.download(fileurl);
     }
 }

@@ -14,5 +14,4 @@ public class boardrequestdto {
 
     private String contentimg;
 
-    private String username;
 }

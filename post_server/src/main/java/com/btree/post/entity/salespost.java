@@ -1,7 +1,7 @@
 package com.btree.post.entity;
 
 import com.btree.post.dto.salesrequestdto;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
@@ -28,7 +28,9 @@ public class salespost {
     @Column
     private int price;
     @Column
-    private String username;
+    private String useremail;
+    @Column
+    private String nickname;
     @Column
     private String category;
     @Column
@@ -45,18 +47,22 @@ public class salespost {
     @Enumerated(EnumType.STRING)@Setter
     @Column
     private salesstate ispoststate;
+    @Column
+    @ColumnDefault("0")
+    private int viewcount;
 
     @Builder
-    public salespost(Long salespostId, String title, String content, String salesimg, int price, String username, String category, String locate, salesstate ispoststate) {
+    public salespost(Long salespostId, String title, String content, String salesimg, int price, String useremail, String category, String locate, salesstate ispoststate,String nickname) {
         this.salespostid = salespostid;
         this.title = title;
         this.content = content;
         this.salesimg = salesimg;
         this.price = price;
-        this.username = username;
+        this.useremail = useremail;
         this.category = category;
         this.locate = locate;
         this.ispoststate=ispoststate;
+        this.nickname=nickname;
     }
 
     public salespost update(salesrequestdto salesrequestdto){
@@ -71,9 +77,10 @@ public class salespost {
 
     @PrePersist
     public void prePersist(){
-        this.username=this.username==null?"empty":this.username;
+        this.useremail=this.useremail==null?"empty":this.useremail;
         this.locate=this.locate==null?"empty":this.locate;
         this.ispoststate=this.ispoststate==null?SALE:this.ispoststate;
+        this.nickname=this.nickname==null?"empty":this.nickname;
     }
 
     @Override
@@ -84,13 +91,19 @@ public class salespost {
                 ", content='" + content + '\'' +
                 ", salesimg='" + salesimg + '\'' +
                 ", price=" + price +
-                ", username='" + username + '\'' +
+                ", useremail='" + useremail + '\'' +
+                ", nickname='" + nickname + '\'' +
                 ", category='" + category + '\'' +
                 ", locate='" + locate + '\'' +
                 ", updatetime=" + updatetime +
                 ", likenum=" + likenum +
                 ", chatnum=" + chatnum +
                 ", ispoststate=" + ispoststate +
+                ", viewcount=" + viewcount +
                 '}';
+    }
+
+    public void viewCountUp(salespost salespost){
+        salespost.viewcount++;
     }
 }
