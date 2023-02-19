@@ -1,16 +1,17 @@
 from fastapi import FastAPI
 from elasticsearch import Elasticsearch
-from insert import json_import
+from insert import json_import, indices_create_nori
 
 app = FastAPI()
 # 
-# json_import('sample.json')
-
-es = Elasticsearch(
+json_import('sample.json') # data mysql indexing
+es = Elasticsearch( 
 
     hosts=["http://elasticsearch:9200"],
     http_auth=('elastic', 'changeme'),
 )
+indices_create_nori(es) # settings, mappings
+
 
 
 @app.get("/")

@@ -24,7 +24,7 @@ create table salespost
 (
     salespostId int auto_increment
         primary key,
-    title       varchar(50)  null,
+    title       varchar(255)  null,
     content     text         null,
     salesimg    varchar(255) null,
     price       int          null,

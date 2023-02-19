@@ -1,7 +1,40 @@
 from database import engine
 import json
 import pandas as pd
+
 # from sqlalchemy.types import INTEGER, VARCHAR, TEXT
+
+def indices_create_nori(es):
+    es.indices.create(
+    index='sales',
+    ignore=400,
+    body={
+        "settings": {
+            "index": {
+                "analysis": {
+                    "analyzer": {
+                        "my_analyzer": {
+                            "type": "custom",
+                            "tokenizer": "nori_tokenizer"
+                        }
+                    }
+                }
+            }
+        },
+        "mappings": {
+            "properties": {
+                "title": {
+                    "type": "text",
+                    "analyzer": "my_analyzer"
+                },
+                "content": {
+                    "type": "text",
+                    "analyzer": "my_analyzer"
+                }
+            }
+        }
+    }
+)
 
 def json_import(path):
 
