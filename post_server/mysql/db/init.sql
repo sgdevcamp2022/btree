@@ -72,4 +72,8 @@ create table boardcomment
     username       varchar(255) null
 );
 
+ALTER DATABASE btree_project CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+ALTER TABLE salespost CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE boardpost CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 
