@@ -21,16 +21,16 @@ public class boardlikeserviceimpl implements boardlikeservice{
     public void clickpostlike(User user, Long postid){
         boardpost boardpost = boardrepository.findById(postid).orElseThrow(null);
 
-        boardlike postlike=boardlikerepository.findByPostidAndUsername(postid,user.getUsername());
+        boardlike postlike=boardlikerepository.findByPostidAndUsername(postid,user.getUseremail());
 
-        if(boardlikerepository.existsByPostidAndUsername(postid, user.getUsername())){
+        if(boardlikerepository.existsByPostidAndUsername(postid, user.getUseremail())){
             boardlikerepository.deleteById(postlike.getBoardlikeid());
             boardrepository.minusLike(postid);
         }
         else{
             boardlike like= boardlike.builder()
                     .postid(postid)
-                    .username(user.getUsername())
+                    .username(user.getUseremail())
                     .build();
             boardlikerepository.save(like);
             boardrepository.plusLike(postid);

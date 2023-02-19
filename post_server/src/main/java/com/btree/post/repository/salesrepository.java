@@ -15,10 +15,17 @@ public interface salesrepository extends JpaRepository<salespost,Long> {
 
    Page<salespost> findByLocateContaining(Pageable pageable,String keyword);
 
+   Page<salespost> findByUseremailContainingAndLocateContaining(Pageable pageable,String useremail,String Locate);
+
+   Page<salespost> findByCategoryContainingAndLocateContaining(Pageable pageable, String category,String Locate);
+
    @Modifying
    @Query("update salespost a set a.likenum = a.likenum - 1 where a.salespostid = :id")
    void minusLike (@Param("id") Long id);
    @Modifying
    @Query("update salespost a set a.likenum = a.likenum + 1 where a.salespostid = :id")
    void plusLike (@Param("id") Long id);
+   @Modifying
+   @Query("update salespost a set a.viewcount = a.viewcount + 1 where a.salespostid = :id")
+   void viewCountUp (@Param("id") Long id);
 }

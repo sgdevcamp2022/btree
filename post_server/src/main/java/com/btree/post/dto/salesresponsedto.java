@@ -21,7 +21,7 @@ public class salesresponsedto {
 
     private int price;
 
-    private String username;
+    private String useremail;
 
     private String category;
 
@@ -34,4 +34,8 @@ public class salesresponsedto {
     private int chatnum;
 
     private salesstate ispoststate;
+
+    private String nickname;
+
+    private int viewcount;
 }

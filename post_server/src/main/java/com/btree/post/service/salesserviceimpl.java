@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,8 +23,6 @@ public class salesserviceimpl implements salesserivce{
 
 
     private final salesrepository salesrepository;
-
-    private final User user;
 
     public salespost save (salespost salespost){
         return salesrepository.save(salespost);
@@ -43,8 +42,28 @@ public class salesserviceimpl implements salesserivce{
         return Allposts;
     }
 
-    public List<salesresponsedto> findAllpostsbylocate (PageRequest pageRequest){
-        List<salespost> posts= salesrepository.findByLocateContaining(pageRequest, user.getLocate()).getContent();
+    public List<salesresponsedto> findAllpostsbylocate (PageRequest pageRequest,String locate){
+        List<salespost> posts= salesrepository.findByLocateContaining(pageRequest, locate).getContent();
+        List<salesresponsedto> Allposts=new ArrayList<>();
+        for (salespost post : posts){
+            salesresponsedto salesresponsedto = responsedto(post);
+            Allposts.add(salesresponsedto);
+        }
+        return Allposts;
+    }
+
+    public List<salesresponsedto> findAllpostsbyUseremail (PageRequest pageRequest,String useremail,String locate){
+        List<salespost> posts= salesrepository.findByUseremailContainingAndLocateContaining(pageRequest, useremail,locate).getContent();
+        List<salesresponsedto> Allposts=new ArrayList<>();
+        for (salespost post : posts){
+            salesresponsedto salesresponsedto = responsedto(post);
+            Allposts.add(salesresponsedto);
+        }
+        return Allposts;
+    }
+
+    public List<salesresponsedto> findAllpostsbyCategory (PageRequest pageRequest,String category,String locate){
+        List<salespost> posts= salesrepository.findByCategoryContainingAndLocateContaining(pageRequest, category,locate).getContent();
         List<salesresponsedto> Allposts=new ArrayList<>();
         for (salespost post : posts){
             salesresponsedto salesresponsedto = responsedto(post);
@@ -60,13 +79,15 @@ public class salesserviceimpl implements salesserivce{
                 salespost.getContent(),
                 salespost.getSalesimg(),
                 salespost.getPrice(),
-                salespost.getUsername(),
+                salespost.getUseremail(),
                 salespost.getCategory(),
                 salespost.getLocate(),
                 salespost.getUpdatetime(),
                 salespost.getLikenum(),
                 salespost.getChatnum(),
-                salespost.getIspoststate()
+                salespost.getIspoststate(),
+                salespost.getNickname(),
+                salespost.getViewcount()
         );
     }
 
@@ -74,16 +95,23 @@ public class salesserviceimpl implements salesserivce{
         return salesrepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
+    @Transactional
     public salespost updateById (Long id, salesrequestdto salesrequestdto, User user){
         salespost targetpost = findById(id);
         return save(targetpost.update(salesrequestdto));
     }
 
+    @Transactional
     public void deletepost (Long id){
         Optional<salespost> post= salesrepository.findById(id);
         if(!post.isPresent()){
             throw new NullPointerException("유효하지 않은 게시글");
         }
         salesrepository.deleteById(id);
+    }
+
+    @Transactional
+    public void viewCountUp(Long id){
+        salesrepository.viewCountUp(id);
     }
 }

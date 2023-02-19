@@ -20,16 +20,16 @@ public class saleslikeserviceimpl implements saleslikeservice{
     public void clickpostlike(User user, Long postid){
         salespost salespost = salesrepository.findById(postid).orElseThrow(null);
 
-        saleslike postlike=saleslikerepository.findByPostidAndUsername(postid,user.getUsername());
+        saleslike postlike=saleslikerepository.findByPostidAndUsername(postid,user.getUseremail());
 
-        if(saleslikerepository.existsByPostidAndUsername(postid, user.getUsername())){
+        if(saleslikerepository.existsByPostidAndUsername(postid, user.getUseremail())){
             saleslikerepository.deleteById(postlike.getSaleslikeid());
             salesrepository.minusLike(postid);
         }
         else{
             saleslike like= saleslike.builder()
                     .postid(postid)
-                    .username(user.getUsername())
+                    .username(user.getUseremail())
                     .build();
             saleslikerepository.save(like);
             salesrepository.plusLike(postid);

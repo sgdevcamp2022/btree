@@ -12,18 +12,19 @@ import org.springframework.stereotype.Service;
 @Builder
 public class User {
 
-    private String username;
+    private String useremail;
     @Builder.Default
     private boolean gpsauth=false;
     private String locate;
-
+    private String nickname;
 
     @Override
     public String toString() {
         return "User{" +
-                "username='" + username + '\'' +
+                "useremail='" + useremail + '\'' +
                 ", gpsauth=" + gpsauth +
                 ", locate='" + locate + '\'' +
+                ", nickname='" + nickname + '\'' +
                 '}';
     }
 }

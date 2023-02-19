@@ -9,7 +9,7 @@ public class commentMapper {
     public boardcomment toEntity(commentrequestdto commentrequestdto, User user){
         return boardcomment.builder()
                 .content(commentrequestdto.getContent())
-                .username(user.getUsername())
+                .username(user.getUseremail())
                 .boardpostid(commentrequestdto.getBoardpostid())
                 .build();
     }

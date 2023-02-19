@@ -21,11 +21,17 @@ public class boardresponsedto {
 
     private String contentimg;
 
-    private String username;
+    private String useremail;
+
+    private String nickname;
 
     private int commentnum;
 
     private Timestamp updatetime;
 
     private String locate;
+
+    private int likenum;
+
+    private int viewcount;
 }
