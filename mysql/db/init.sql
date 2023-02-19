@@ -28,7 +28,8 @@ create table salespost
     content     text         null,
     salesimg    varchar(255) null,
     price       int          null,
-    username    varchar(50)  null,
+    nickname    varchar(50)  null,
+    useremail   varchar(50)  null,
     category    varchar(50)  null,
     locate      varchar(100) null,
     updatetime  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -57,7 +58,8 @@ create table boardpost
     locate      varchar(255)  null,
     title       varchar(255)  null,
     updatetime  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    username    varchar(255)  null
+    useremail    varchar(255)  null,
+    nickname    varchar(255) null
 );
 
 create table boardlike
