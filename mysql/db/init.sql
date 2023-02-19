@@ -37,7 +37,6 @@ create table salespost
     chatnum     int          null,
     ispoststate varchar(255) null
 );
-alter table salespost CHARACTER SET utf8mb4 collate utf8mb4_unicode_ci;
 
 create table saleslike
 (
@@ -72,5 +71,6 @@ create table boardlike
 
 ALTER DATABASE btree_project CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 ALTER TABLE salespost CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE boardpost CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 
