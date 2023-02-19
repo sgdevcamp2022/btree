@@ -4,7 +4,7 @@ from insert import json_import, indices_create_nori
 
 app = FastAPI()
 # 
-json_import('sample.json') # data mysql indexing
+# json_import('sample.json') # data mysql indexing
 es = Elasticsearch( 
 
     hosts=["http://elasticsearch:9200"],
@@ -21,7 +21,7 @@ async def root():
 @app.get("/search/{query}")
 def search(query):
     return es.search(
-        index="post", body={"query": {"multi_match": {"query": query, "fields": ["title^2", "content"]}}}
+        index="sales", body={"query": {"multi_match": {"query": query, "fields": ["title^2", "content"]}}}
     )
 
 @app.get("/input_json")
