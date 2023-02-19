@@ -26,3 +26,8 @@ oauth2_creds.json
 *~
 .*.sw?
 application-aws.yml
+
+# es config
+elk/elasticsearch/_state/
+elk/elasticsearch/indices/
+elk/elasticsearch/snapshot_cache/
