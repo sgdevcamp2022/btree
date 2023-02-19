@@ -31,11 +31,12 @@ create table salespost
     username    varchar(50)  null,
     category    varchar(50)  null,
     locate      varchar(100) null,
-    updatetime  datetime     null,
+    updatetime  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     likenum     int          null,
     chatnum     int          null,
     ispoststate varchar(255) null
 );
+alter table salespost CHARACTER SET utf8mb4 collate utf8mb4_unicode_ci;
 
 create table saleslike
 (
@@ -66,5 +67,3 @@ create table boardlike
     postid      bigint       null,
     username    varchar(255) null
 );
-
-

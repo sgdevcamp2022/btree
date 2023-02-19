@@ -1,9 +1,13 @@
 from fastapi import FastAPI
 from elasticsearch import Elasticsearch
-app = FastAPI()
+from insert import json_import
 
+app = FastAPI()
+# 
+# json_import('sample.json')
 
 es = Elasticsearch(
+
     hosts=["http://elasticsearch:9200"],
     http_auth=('elastic', 'changeme'),
 )
@@ -18,3 +22,8 @@ def search(query):
     return es.search(
         index="post", body={"query": {"multi_match": {"query": query, "fields": ["title^2", "content"]}}}
     )
+
+@app.get("/input_json")
+def input_json():
+    json_import('sample.json')
+    return "1"

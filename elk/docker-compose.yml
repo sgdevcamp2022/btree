@@ -20,6 +20,7 @@ services:
     tty: true
     volumes:
       - ./search_server:/app
+      - ./crawling/sample.json:/app
     ports:
       - 8456:8456
   setup:

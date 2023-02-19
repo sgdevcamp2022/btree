@@ -50,6 +50,8 @@ class RefreshToken(BaseModel):
 class TokenData(BaseModel):
     email: Union[str, None] = None
 
+class RefreshIncludedToken(Token):
+    refresh_token: str
 
 class TokenDataModel(BaseModel):
     access_token: str
