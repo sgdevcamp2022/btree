@@ -9,15 +9,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import com.example.carrot.R
 import com.example.carrot.model.SalePostResponse
 import com.example.carrot.ui.component.*
@@ -26,6 +30,9 @@ import com.example.carrot.ui.theme.Carrot
 import com.example.carrot.ui.theme.Grey160
 import com.example.carrot.ui.theme.Grey220
 import com.example.carrot.ui.theme.Grey245
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // TODO("일정 스크롤 밑으로 내일 시 투명한걸 없애고 흰색으로 바꿀 것")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -125,7 +132,8 @@ fun PostDetailScreen(
         topBar = { PostTopAppBar(onBack, toggleMainBottomBar) },
         content = {
             PostMetaData(
-                post = postDetailViewModel.salePostDetail.value
+                post = postDetailViewModel.salePostDetail.value,
+                postDetailViewModel = postDetailViewModel
             )
         },
         bottomBar = { PostDetailBottomBar(postDetailViewModel)}
@@ -134,7 +142,8 @@ fun PostDetailScreen(
 
 @Composable
 fun PostMetaData(
-    post: SalePostResponse
+    post: SalePostResponse,
+    postDetailViewModel: PostDetailViewModel
 ) {
     LazyColumn(
         modifier = Modifier
@@ -142,7 +151,10 @@ fun PostMetaData(
             .fillMaxSize()
     ) {
         item {
-            PostImages(post = post)
+            PostImages(
+                post = post,
+                postDetailViewModel = postDetailViewModel
+            )
         }
         item {
             PostWriterInfo(post = post)
@@ -164,17 +176,44 @@ fun PostMetaData(
 
 
 @Composable
-fun PostImages(post: SalePostResponse) {
+fun PostImages(
+    postDetailViewModel: PostDetailViewModel,
+    post: SalePostResponse
+) {
+
+    val imageBitmap by postDetailViewModel.bitmap.observeAsState()
+
     val imageModifier = Modifier
         .fillMaxWidth()
         .height(340.dp)
         .clip(shape = MaterialTheme.shapes.extraSmall)
-    Image(
-        painter = painterResource(id = R.drawable.testpic),
-        contentDescription = "post title image",
-        modifier = imageModifier,
-        contentScale = ContentScale.Crop
-    )
+
+    if (post.salesImg == null || post.salePostId == 0L){
+        Log.i("POSTDETAIL", "in if post card${post.salePostId} image : ${post.salesImg}")
+        Image(
+            painter = painterResource(id = R.drawable.default_article),
+            contentDescription = "post title image",
+            modifier = imageModifier,
+            contentScale = ContentScale.Crop
+        )
+    } else {
+        Log.i("POSTDETAIL", "in else post card${post.salePostId} image : ${post.salesImg}")
+        LaunchedEffect(Unit){
+            postDetailViewModel.viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    postDetailViewModel.getSalePostImage(post.salesImg)
+                }
+            }
+        }
+        imageBitmap?.let {
+            Image(
+                bitmap = it.asImageBitmap(),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = imageModifier
+            )
+        }
+    }
 }
 
 @Composable

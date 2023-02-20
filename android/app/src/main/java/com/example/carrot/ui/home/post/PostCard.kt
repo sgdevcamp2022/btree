@@ -14,23 +14,34 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import com.example.carrot.R
 import com.example.carrot.model.SalePost
 import com.example.carrot.model.SalePostResponse
 import com.example.carrot.model.SampleData
 import com.example.carrot.ui.theme.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Duration
 import java.time.LocalDateTime
+import androidx.compose.runtime.livedata.observeAsState
+
 
 @Composable
 fun PostCard(
+    postCardViewModel: PostCardViewModel = PostCardViewModel(),
     post: SalePostResponse,
     navigateToPost: (Long) -> Unit
 ){
+
+    val imageBitmap by postCardViewModel.bitmap.observeAsState()
+
     Column(
         Modifier.background(color = Color.White)
     ) {
@@ -39,16 +50,39 @@ fun PostCard(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.clickable { navigateToPost(post.salePostId) }
         ) {
-            Image(
-                // TODO: CHANGE PICTURE WITH S3
-                painter = painterResource(R.drawable.testpic),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .size(80.dp, 80.dp)
-                    .clip(MaterialTheme.shapes.small)
-            )
+            Log.i("POSTCARD", "post card${post.salePostId} image : ${post.salesImg}")
+            if (post.salesImg == null){
+                Log.i("POSTCARD", "in if post card${post.salePostId} image : ${post.salesImg}")
+                Image(
+                    painter = painterResource(id = R.drawable.default_article),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .size(80.dp, 80.dp)
+                        .clip(MaterialTheme.shapes.small)
+                )
+            } else {
+                LaunchedEffect(Unit){
+                    postCardViewModel.viewModelScope.launch {
+                        withContext(Dispatchers.IO) {
+                            postCardViewModel.getSalePostImage(post.salesImg)
+                        }
+                    }
+                }
+                imageBitmap?.let {
+                    Image(
+                        bitmap = it.asImageBitmap(),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .size(80.dp, 80.dp)
+                            .clip(MaterialTheme.shapes.small)
+                    )
+                }
+            }
+
             Column(
                 Modifier
                     .height(80.dp)

@@ -1,8 +1,12 @@
 package com.example.carrot.ui.home
 
+import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import com.example.carrot.R
+import com.example.carrot.api.PostUtilApi
+import com.example.carrot.api.RetrofitClient.PostUtilApiService
 import com.example.carrot.api.RetrofitClient.SalePostApiService
 import com.example.carrot.model.SalePostResponse
 
@@ -18,6 +22,11 @@ class HomeViewModel(
             val response = SalePostApiService.getSalePostList(0, 10)
             when(response.code()){
                 200 -> {
+                    response.body()?.forEach { SalePostResponse ->
+                        if (SalePostResponse.salesImg == "null"){
+
+                        }
+                    }
                     response.body()?.let { SalePostList ->
                         _salePostList.addAll(SalePostList)
                     }

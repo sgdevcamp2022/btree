@@ -50,6 +50,7 @@ data class SalePostRequest(
     val title: String,
     val content: String,
     val price: Int,
+    @SerializedName("salesimg")
     val salesImg: String,
     val isPostState: String
 )

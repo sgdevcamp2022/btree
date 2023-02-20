@@ -3,13 +3,17 @@ package com.example.carrot.api
 import com.example.carrot.model.ImageResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
 interface PostUtilApi {
+    @Streaming
     @GET("/post/api/s3/download")
-    suspend fun getPostImage()
+    suspend fun getPostImage(
+        @Query("fileurl") fileurl: String
+    ): ResponseBody
 
     @Multipart
     @POST("/post/api/s3/upload")

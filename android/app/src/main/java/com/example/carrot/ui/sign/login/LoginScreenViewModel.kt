@@ -61,7 +61,6 @@ class LoginScreenViewModel(): ViewModel() {
                 } else{
                     authenticate()
                 }
-
             } catch (e: Exception){
                 Log.i("MY INFO", "my info goes wrong : $e")
                 e.printStackTrace()

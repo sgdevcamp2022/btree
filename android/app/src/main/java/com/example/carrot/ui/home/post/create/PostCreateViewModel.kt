@@ -44,11 +44,12 @@ class PostCreateViewModel(
         _contents.value = it
     }
 
-    val imagesUris = mutableStateListOf<Uri?>()
-    val setImageUris: (List<Uri>) -> Unit = {
-        imagesUris.addAll(it)
-    }
+//    private val imagesUris = mutableStateListOf<Uri?>()
+//    val setImageUris: (List<Uri>) -> Unit = {
+//        imagesUris.addAll(it)
+//    }
 
+    private val imageUri = mutableStateOf("")
 
     suspend fun createSalePost() {
         val salePostRequest = SalePostRequest(
@@ -56,9 +57,10 @@ class PostCreateViewModel(
             title = _title.value,
             content = _contents.value,
             price = _price.value.toInt(),
-            salesImg = "null",
+            salesImg = imageUri.value,
             isPostState = "RESERVE"
         )
+        Log.i("CREATE SALEPOST", "saleImg : ${salePostRequest.salesImg}, imageUri : ${imageUri.value}")
         try {
             val response = SalePostApiService.createSalePost(salePostRequest = salePostRequest)
             when (response.code()) {
@@ -78,6 +80,7 @@ class PostCreateViewModel(
             val response = PostUtilApiService.uploadPostImage(files = file!!)
             when (response.code()) {
                 200 -> {
+                    imageUri.value = response.body()?.path!!
                     Log.i("CREATE SALEPOST", "upload image url : ${response.body()?.path}")
                 }
                 else -> {
