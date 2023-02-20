@@ -54,6 +54,9 @@ data class SalePostRequest(
     val isPostState: String
 )
 
+data class ImageResponse(
+    val path: String
+)
 //data class SalePost(
 //    val id: Long,
 //    val title: String,

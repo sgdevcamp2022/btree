@@ -29,4 +29,9 @@ object RetrofitClient {
         retrofit.build()
             .create(ComPostApi::class.java)
     }
+
+    val PostUtilApiService: PostUtilApi by lazy {
+        retrofit.build()
+            .create(PostUtilApi::class.java)
+    }
 }

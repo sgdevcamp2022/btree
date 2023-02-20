@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -120,7 +121,7 @@ fun PostCreateScreen(
 @Composable
 fun PostCreateScreenContent(postCreateViewModel: PostCreateViewModel){
     Spacer(modifier = Modifier.height(20.dp))
-    AddImage()
+    AddImage(postCreateViewModel)
     Spacer(modifier = Modifier.height(20.dp))
     Divider(
         modifier = Modifier
@@ -159,24 +160,24 @@ fun PostCreateScreenContent(postCreateViewModel: PostCreateViewModel){
 }
 
 @Composable
-fun AddImage(){
+fun AddImage(
+    postCreateViewModel: PostCreateViewModel
+){
+    val context = LocalContext.current
 
-    val pickMultipleMedia =
-        rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { uris ->
-            // Callback is invoked after the user selects media items or closes the
-            // photo picker.
-            if (uris.isNotEmpty()) {
-                Log.d("PhotoPicker", "Number of items selected: ${uris.size}")
-                uris.forEach {
-                    Log.d("PhotoPicker", "items : $it")
-                }
-            } else {
-                Log.d("PhotoPicker", "No media selected")
+    val pickMedia = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()) { uri ->
+            GlobalScope.launch {
+                postCreateViewModel.uploadImage(uri!!, context)
+                Log.i("PHOTOPICKER", "uri : $uri")
             }
         }
+
     Button(
         onClick = {
-            pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            pickMedia.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+            )
         },
         contentPadding = PaddingValues(horizontal = 20.dp, vertical = 14.dp),
         shape = MaterialTheme.shapes.extraSmall,
