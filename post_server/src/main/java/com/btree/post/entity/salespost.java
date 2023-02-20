@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -38,7 +39,9 @@ public class salespost {
     private String category;
     @Column
     private String locate;
-    @Column
+    @UpdateTimestamp
+    @Column(name="updatetime",nullable = false, insertable = false,columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @NotNull
     private Timestamp updatetime;
     @Column
     @ColumnDefault("0")
