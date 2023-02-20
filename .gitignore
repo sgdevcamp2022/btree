@@ -26,7 +26,7 @@ oauth2_creds.json
 *~
 .*.sw?
 application-aws.yml
-
+*.iml
 # es config
 elk/elasticsearch/_state/
 elk/elasticsearch/indices/
