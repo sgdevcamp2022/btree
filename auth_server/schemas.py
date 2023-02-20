@@ -81,3 +81,24 @@ class UserNickname(BaseModel):
 
     class Config:
         orm_mode = True
+        
+class UserCategory(BaseModel):
+    digitals: Optional[bool] = True
+    appliances: Optional[bool] = True
+    funitures: Optional[bool] = True
+    livings: Optional[bool] = True
+    kids:  Optional[bool] = True
+    kid_books: Optional[bool] = True
+    woman_clothes: Optional[bool] = True
+    woman_things: Optional[bool] = True
+    man_things: Optional[bool] = True
+    beauty: Optional[bool] = True
+    sports: Optional[bool] = True
+    hobby_game_recodes: Optional[bool] = True
+    books: Optional[bool] = True
+    tickets: Optional[bool] = True
+    processed_food: Optional[bool] = True
+    pets: Optional[bool] = True
+    plants: Optional[bool] = True
+    others: Optional[bool] = True
+    buys: Optional[bool] = True

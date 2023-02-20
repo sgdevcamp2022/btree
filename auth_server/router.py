@@ -5,7 +5,7 @@ from config import rd
 import utils
 import datetime
 from database import SessionLocal
-from crud import update_user_active_by_email
+from crud import update_user_active_by_email, create_usercategory
 from config import rd
 router = APIRouter()
 
@@ -38,6 +38,7 @@ async def auth_verify_email(token: str, db: Session = Depends(get_db)):
         email = rd.get(token)
         rd.delete(token)
         user = update_user_active_by_email(db, email)
+        create_usercategory(db, user.userId)
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
