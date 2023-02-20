@@ -7,6 +7,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
@@ -53,7 +54,7 @@ public class salespost {
     private int viewcount;
 
     @Builder
-    public salespost(Long salespostId, String title, String content, String salesimg, int price, String useremail, String category, String locate, salesstate ispoststate,String nickname) {
+    public salespost(Long salespostId, String title, String content, String salesimg, int price, String useremail, String category, String locate, salesstate ispoststate, String nickname, Timestamp updatetime) {
         this.salespostid = salespostid;
         this.title = title;
         this.content = content;
@@ -64,6 +65,7 @@ public class salespost {
         this.locate = locate;
         this.ispoststate=ispoststate;
         this.nickname=nickname;
+        this.updatetime=updatetime;
     }
 
     public salespost update(salesrequestdto salesrequestdto){

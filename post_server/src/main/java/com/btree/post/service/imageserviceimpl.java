@@ -31,7 +31,7 @@ public class imageserviceimpl implements imageservice{
     private String bucket;
 
     private final AmazonS3 amazonS3;
-/* //다중 이미지 처리
+
     public List<String> uploadFile(List<MultipartFile> multipartFile)throws IOException{
         List<String> fileNameList = new ArrayList<>();
 
@@ -53,7 +53,6 @@ public class imageserviceimpl implements imageservice{
 
         return fileNameList;
     }
-*/
 
 
     public void deleteFile(String fileName){
