@@ -5,7 +5,9 @@ import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import static com.btree.post.entity.salesstate.SALE;
@@ -21,7 +23,7 @@ public class salespost {
     private Long salespostid;
     @Column
     private String title;
-    @Column
+    @Column(length = 1000)
     private String content;
     @Column
     private String salesimg;
@@ -35,9 +37,8 @@ public class salespost {
     private String category;
     @Column
     private String locate;
-    @CreationTimestamp
     @Column
-    private LocalDateTime updatetime;
+    private Timestamp updatetime;
     @Column
     @ColumnDefault("0")
     private int likenum;

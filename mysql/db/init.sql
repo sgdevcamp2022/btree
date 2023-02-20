@@ -25,9 +25,9 @@ create table salespost
     salespostId int auto_increment
         primary key,
     title       varchar(255)  null,
-    content     text         null,
+    content     varchar(5000)         null,
     salesimg    varchar(255) null,
-    price       int          null,
+    price       int        not  null default 0,
     nickname    varchar(50)  null,
     useremail   varchar(50)  null,
     category    varchar(50)  null,
@@ -35,7 +35,8 @@ create table salespost
     updatetime  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     likenum     int          null,
     chatnum     int          null,
-    ispoststate varchar(255) null
+    ispoststate varchar(255) null,
+    viewcount   int     not null   default 0
 );
 
 create table saleslike
@@ -51,14 +52,15 @@ create table boardpost
     boardpostid bigint auto_increment
         primary key,
     commentnum  int default 0 null,
-    content     varchar(255)  null,
+    content     varchar(5000)  null,
     contentimg  varchar(255)  null,
     likenum     int default 0 null,
     locate      varchar(255)  null,
     title       varchar(255)  null,
     updatetime  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     useremail    varchar(255)  null,
-    nickname    varchar(255) null
+    nickname    varchar(255) null,
+    viewcount   int     not null   default 0
 );
 
 create table boardlike
