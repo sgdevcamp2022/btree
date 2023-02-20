@@ -35,7 +35,7 @@ create table salespost
     useremail   varchar(50)  null,
     category    varchar(50)  null,
     locate      varchar(100) null,
-    updatetime  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updatetime  TIMESTAMP  NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     likenum     int          null,
     chatnum     int          null,
     ispoststate varchar(255) null,

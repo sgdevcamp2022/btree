@@ -84,6 +84,7 @@ public class salespost {
         this.locate=this.locate==null?"empty":this.locate;
         this.ispoststate=this.ispoststate==null?SALE:this.ispoststate;
         this.nickname=this.nickname==null?"empty":this.nickname;
+        this.updatetime=this.updatetime==null?Timestamp.valueOf(LocalDateTime.now()):this.updatetime;
     }
 
     @Override
