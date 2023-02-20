@@ -18,7 +18,8 @@ services:  # 컨테이너의 서비스라는것을 정의
     tty: true
     volumes:
       - ./elk/search_server:/app
-      - ./crawling/sample.json:/app/sample.json
+      - ./crawling/sample1000.json:/app/sample1000.json
+      - ./crawling/sample10000.json:/app/sample10000.json
     ports:
       - 8456:8456
     environment:

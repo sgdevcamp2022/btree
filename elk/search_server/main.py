@@ -24,7 +24,12 @@ def search(query):
         index="sales", body={"query": {"multi_match": {"query": query, "fields": ["title^2", "content"]}}}
     )
 
-@app.get("/input_json")
+@app.get("/input_json1000")
 def input_json():
-    json_import('sample.json')
-    return "1"
+    json_import('sample1000.json')
+    return "import success"
+
+@app.get("/input_json10000")
+def input_json():
+    json_import('sample10000.json')
+    return "import success"
