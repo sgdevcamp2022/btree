@@ -172,6 +172,34 @@ async def update_nickname(nickname: schemas.UserNickname,
     user = crud.update_user_nickname(db, user, new_nickname)
     return user
 
+@app.get("/read_usercategory")
+async def read_usercategory(token: str = Depends(oauth2_scheme),
+                            db: Session = Depends(get_db)):
+    if not utils.is_valid_accessToken(token):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Token is invalid"
+        )
+    user = utils.get_current_user(token, db)
+    user_category = crud.get_user_category_by_user(db, user)
+    return user_category
+    
+
+@app.post("/update_usercategory")
+async def update_category(new_usercategory: schemas.UserCategory,
+                          token: str = Depends(oauth2_scheme),
+                          db: Session = Depends(get_db)):
+    if not utils.is_valid_accessToken(token):
+        return HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Token is invalid"
+        )
+    
+    user = utils.get_current_user(token, db)
+    user_category = crud.get_user_category_by_user(db, user)
+    new_category = crud.update_usercategory(db, user_category, new_usercategory)
+    return new_category
+
 @app.get("/items/")
 async def read_items(token: str = Depends(oauth2_scheme)):
     return {"token": token}
