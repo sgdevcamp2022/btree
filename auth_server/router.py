@@ -32,7 +32,7 @@ def read_root():
     return {"Hello": "World"}
 
 
-@router.get("/email_verify_token/{token}")
+@router.get("/auth/email_verify_token/{token}")
 async def auth_verify_email(token: str, db: Session = Depends(get_db)):
     if rd.exists(token):
         email = rd.get(token)
@@ -46,7 +46,7 @@ async def auth_verify_email(token: str, db: Session = Depends(get_db)):
         )
     return user
 
-@router.post("/email_verify")
+@router.post("/auth/email_verify")
 def auth_verify(user: UserBase):
     result = utils.email_auth(user.email)
     return result

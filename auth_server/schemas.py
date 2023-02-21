@@ -72,12 +72,20 @@ class UserProfile(UserBase):
     nickname: Optional[str]
     manner_temporature: float
     create_at: datetime
+    locate: str
 
     class Config:
         orm_mode = True
 
 class UserNickname(BaseModel):
     new_nickname: str
+
+    class Config:
+        orm_mode = True
+
+
+class UserLocate(BaseModel):
+    new_locate: str
 
     class Config:
         orm_mode = True

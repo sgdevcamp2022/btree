@@ -44,6 +44,19 @@ def update_user_nickname(db: Session, user: models.User , new_nickname: str):
         )    
     return user
 
+def update_user_locate(db: Session, user: models.User , new_locate: str):
+    if user:
+        user.locate = new_locate
+        db.commit()
+        db.refresh(user)
+        print(new_locate, user.locate)
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="user not found"
+        )    
+    return user
+
 def create_usercategory(db: Session, userId: int):
     db_category = models.UserCategory(
         usercategoryId = userId,
