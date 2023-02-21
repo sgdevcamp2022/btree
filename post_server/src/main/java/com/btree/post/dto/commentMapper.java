@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class commentMapper {
-    public boardcomment toEntity(commentrequestdto commentrequestdto, User user){
+    public boardcomment toEntity(commentrequestdto commentrequestdto, userdto userdto){
         return boardcomment.builder()
                 .content(commentrequestdto.getContent())
-                .username(user.getUseremail())
+                .username(userdto.getUseremail())
                 .boardpostid(commentrequestdto.getBoardpostid())
                 .build();
     }

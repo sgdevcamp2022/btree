@@ -3,10 +3,10 @@ package com.btree.post.controller;
 import com.btree.post.dto.salesMapper;
 import com.btree.post.dto.salesrequestdto;
 import com.btree.post.dto.salesresponsedto;
+import com.btree.post.dto.userdto;
 import com.btree.post.entity.salespost;
 import com.btree.post.service.saleslikeserviceimpl;
 import com.btree.post.service.salesserviceimpl;
-import com.btree.post.util.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,19 +19,19 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/posts")
+@RequestMapping("/post/api/posts")
 @RestController
 public class salescontroller {
     private final salesserviceimpl saleservice;
     private final salesMapper salesmapper;
     private final saleslikeserviceimpl saleslikeservice;
 
-    private final User user;
+
 
     @PostMapping//게시글 작성
-    public ResponseEntity<String> createPost (@RequestBody salesrequestdto salesrequestdto){
-        salespost salespost = saleservice.save(salesmapper.toEntity(salesrequestdto,user));
-        System.out.println(user.getLocate());
+    public ResponseEntity<String> createPost (@RequestBody salesrequestdto salesrequestdto,@RequestBody userdto userdto){
+        salespost salespost = saleservice.save(salesmapper.toEntity(salesrequestdto,userdto));
+        System.out.println(userdto.getLocate());
         return ResponseEntity.ok()
                 .body("게시글 작성 성공");
     }
@@ -46,26 +46,26 @@ public class salescontroller {
     }
 
     @GetMapping// 게시글 목록
-    public List<salesresponsedto> findAllPostbyLocation (@RequestParam int page, @RequestParam int size){
+    public List<salesresponsedto> findAllPostbyLocation (@RequestParam int page, @RequestParam int size,@RequestBody userdto userdto){
         PageRequest sortByPostid = PageRequest.of(page, size, Sort.by("salespostid").descending());
-        return saleservice.findAllpostsbylocate(sortByPostid, user.getLocate());
+        return saleservice.findAllpostsbylocate(sortByPostid, userdto.getLocate());
     }
 
     @GetMapping("/user")// useremail로 게시글 목록 불러오기
-    public List<salesresponsedto> findAllPostbyUseremail (@RequestParam int page, @RequestParam int size){
+    public List<salesresponsedto> findAllPostbyUseremail (@RequestParam int page, @RequestParam int size,@RequestBody userdto userdto){
         PageRequest sortByPostid = PageRequest.of(page, size, Sort.by("salespostid").descending());
-        return saleservice.findAllpostsbyUseremail(sortByPostid, user.getUseremail(), user.getLocate());
+        return saleservice.findAllpostsbyUseremail(sortByPostid, userdto.getUseremail(), userdto.getLocate());
     }
 
     @GetMapping("/category")// 카테고리로 게시글 목록 불러오기
-    public List<salesresponsedto> findAllPostbyCategory (@RequestParam int page, @RequestParam int size,@RequestParam String category){
+    public List<salesresponsedto> findAllPostbyCategory (@RequestParam int page, @RequestParam int size,@RequestParam String category,@RequestBody userdto userdto){
         PageRequest sortByPostid = PageRequest.of(page, size, Sort.by("salespostid").descending());
-        return saleservice.findAllpostsbyCategory(sortByPostid, category, user.getLocate());
+        return saleservice.findAllpostsbyCategory(sortByPostid, category, userdto.getLocate());
     }
 
     @PutMapping("/{id}") // 게시글 수정
-    public void updatePost (@PathVariable Long id, @RequestBody salesrequestdto salesrequestdto){
-        saleservice.updateById(id,salesrequestdto,user);
+    public void updatePost (@PathVariable Long id, @RequestBody salesrequestdto salesrequestdto,@RequestBody userdto userdto){
+        saleservice.updateById(id,salesrequestdto,userdto);
     }
 
     @DeleteMapping("/{id}") // 게시글 삭제
@@ -74,8 +74,8 @@ public class salescontroller {
     }
 
     @PostMapping("/saleslike/{postid}") //좋아요 기능
-    public void clickSalesLike(User user, @PathVariable("postid") Long id){
-        saleslikeservice.clickpostlike(user, id);
+    public void clickSalesLike(@RequestBody userdto userdto, @PathVariable("postid") Long id){
+        saleslikeservice.clickpostlike(userdto, id);
     }
 
     private void viewCountUp(Long id, HttpServletRequest req, HttpServletResponse res){

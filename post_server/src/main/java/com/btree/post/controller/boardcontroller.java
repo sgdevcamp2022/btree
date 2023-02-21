@@ -6,7 +6,6 @@ import com.btree.post.entity.boardpost;
 import com.btree.post.service.boardlikeserviceimpl;
 import com.btree.post.service.boardserviceimpl;
 import com.btree.post.service.commentserviceimpl;
-import com.btree.post.util.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/board")
+@RequestMapping("/post/api/board")
 @RestController
 public class boardcontroller {
     private final boardserviceimpl boardservice;
@@ -28,17 +27,16 @@ public class boardcontroller {
     private final commentserviceimpl commentservice;
     private final commentMapper commentmapper;
 
-    private final User user;
-
     @PostMapping//게시글 작성
-    public ResponseEntity<String> createPost(@RequestBody boardrequestdto boardrequestdto){
-        boardpost boardpost=boardservice.save(boardmapper.toEntity(boardrequestdto,user));
-        System.out.println(user.getLocate());
+    public ResponseEntity<String> createPost(@RequestBody boardrequestdto boardrequestdto,@RequestBody userdto userdto){
+
+        boardpost boardpost=boardservice.save(boardmapper.toEntity(boardrequestdto,userdto));
+
         return ResponseEntity.ok()
                 .body("게시글 작성 성공");
     }
     @GetMapping("/{id}")//상세 페이지 조회
-    public ResponseEntity<boardresponsedto> detailPost (@PathVariable("id") Long id,User user,HttpServletRequest req, HttpServletResponse res){
+    public ResponseEntity<boardresponsedto> detailPost (@PathVariable("id") Long id,HttpServletRequest req, HttpServletResponse res){
         viewCountUp((long) id,req,res);
         boardpost post=boardservice.findById(id);
         boardresponsedto boardresponsedto=boardmapper.fromEntity(post);
@@ -46,13 +44,13 @@ public class boardcontroller {
                 .body(boardresponsedto);
     }
     @GetMapping//게시글 목록
-    public List<boardresponsedto>findAllPost(@RequestParam int page,@RequestParam int size){
+    public List<boardresponsedto>findAllPost(@RequestParam int page,@RequestParam int size,@RequestBody userdto userdto){
         PageRequest sortByPostid=PageRequest.of(page, size, Sort.by("boardpostid").descending());
-        return boardservice.findAllpostsbylocate(sortByPostid, user.getLocate());
+        return boardservice.findAllpostsbylocate(sortByPostid, userdto.getLocate());
     }
     @PutMapping("/{id}")//게시글 수정
-    public void updatePost(@PathVariable Long id,@RequestBody boardrequestdto boardrequestdto){
-        boardservice.updateById(id,boardrequestdto,user);
+    public void updatePost(@PathVariable Long id,@RequestBody boardrequestdto boardrequestdto,@RequestBody userdto userdto){
+        boardservice.updateById(id,boardrequestdto,userdto);
     }
     @DeleteMapping("/{id}")//게시글 삭제
     public void deletePost (@PathVariable Long id){
@@ -60,14 +58,14 @@ public class boardcontroller {
     }
 
     @PostMapping("/{boardlike}") //좋아요 기능
-    public void clickSalesLike(User user, @PathVariable Long postid){
-        boardlikeservice.clickpostlike(user,postid);
+    public void clickSalesLike(@RequestBody userdto userdto, @PathVariable Long postid){
+        boardlikeservice.clickpostlike(userdto,postid);
     }
 
     @PostMapping("/comment/{postid}") //댓글 작성
-    public ResponseEntity<commentresponsedto> createComment(@PathVariable("postid") Long postid, @RequestBody commentrequestdto commentrequestdto){
+    public ResponseEntity<commentresponsedto> createComment(@PathVariable("postid") Long postid, @RequestBody commentrequestdto commentrequestdto,@RequestBody userdto userdto){
         commentrequestdto.setBoardpostid(Math.toIntExact(postid));
-        boardcomment newcomment = commentmapper.toEntity(commentrequestdto,user);
+        boardcomment newcomment = commentmapper.toEntity(commentrequestdto,userdto);
         commentservice.commentsave(newcomment);
         commentresponsedto responsedto=commentmapper.fromEntity(newcomment);
         return ResponseEntity.ok()

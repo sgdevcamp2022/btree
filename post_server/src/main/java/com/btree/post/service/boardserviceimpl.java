@@ -2,6 +2,7 @@ package com.btree.post.service;
 
 import com.btree.post.dto.boardrequestdto;
 import com.btree.post.dto.boardresponsedto;
+import com.btree.post.dto.userdto;
 import com.btree.post.entity.boardpost;
 import com.btree.post.exception.NotFoundException;
 import com.btree.post.repository.boardrepository;
@@ -67,7 +68,7 @@ public class boardserviceimpl implements boardservice {
     }
 
     @Transactional
-    public boardpost updateById(Long id, boardrequestdto boardrequestdto,User user){
+    public boardpost updateById(Long id, boardrequestdto boardrequestdto, userdto userdto){
         boardpost targetpost=findById(id);
         return save(targetpost.update(boardrequestdto));
     }

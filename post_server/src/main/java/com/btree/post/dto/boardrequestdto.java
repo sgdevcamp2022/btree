@@ -14,4 +14,10 @@ public class boardrequestdto {
 
     private String contentimg;
 
+    private String useremail;
+
+    private String locate;
+
+    private String nickname;
+
 }

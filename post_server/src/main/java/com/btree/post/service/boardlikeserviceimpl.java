@@ -1,5 +1,6 @@
 package com.btree.post.service;
 
+import com.btree.post.dto.userdto;
 import com.btree.post.entity.boardlike;
 import com.btree.post.entity.boardpost;
 import com.btree.post.repository.boardlikerepository;
@@ -18,19 +19,19 @@ public class boardlikeserviceimpl implements boardlikeservice{
     private final boardrepository boardrepository;
 
     @Transactional
-    public void clickpostlike(User user, Long postid){
+    public void clickpostlike(userdto userdto, Long postid){
         boardpost boardpost = boardrepository.findById(postid).orElseThrow(null);
 
-        boardlike postlike=boardlikerepository.findByPostidAndUsername(postid,user.getUseremail());
+        boardlike postlike=boardlikerepository.findByPostidAndUsername(postid,userdto.getUseremail());
 
-        if(boardlikerepository.existsByPostidAndUsername(postid, user.getUseremail())){
+        if(boardlikerepository.existsByPostidAndUsername(postid, userdto.getUseremail())){
             boardlikerepository.deleteById(postlike.getBoardlikeid());
             boardrepository.minusLike(postid);
         }
         else{
             boardlike like= boardlike.builder()
                     .postid(postid)
-                    .username(user.getUseremail())
+                    .username(userdto.getUseremail())
                     .build();
             boardlikerepository.save(like);
             boardrepository.plusLike(postid);

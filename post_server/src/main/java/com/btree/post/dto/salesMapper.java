@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class salesMapper {
 
-    public salespost toEntity (salesrequestdto salesrequestdto, User user){
+    public salespost toEntity (salesrequestdto salesrequestdto, userdto userdto){
         return salespost.builder()
-                .useremail(user.getUseremail())
-                .nickname(user.getNickname())
+                .useremail(userdto.getUseremail())
+                .nickname(userdto.getNickname())
                 .title(salesrequestdto.getTitle())
                 .content(salesrequestdto.getContent())
                 .salesimg(salesrequestdto.getSalesimg())
                 .category(salesrequestdto.getCategory())
-                .locate(user.getLocate())
+                .locate(userdto.getLocate())
                 .price(salesrequestdto.getPrice())
                 .ispoststate(salesrequestdto.getIspoststate())
                 .build();

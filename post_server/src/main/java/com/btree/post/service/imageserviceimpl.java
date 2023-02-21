@@ -32,28 +32,26 @@ public class imageserviceimpl implements imageservice{
 
     private final AmazonS3 amazonS3;
 
-    public List<String> uploadFile(List<MultipartFile> multipartFile)throws IOException{
-        List<String> fileNameList = new ArrayList<>();
+    public String uploadFile(MultipartFile multipartFile)throws IOException{
 
-        multipartFile.forEach(file->{
-            String fileName= createFileName(file.getOriginalFilename());
-            ObjectMetadata objectMetadata=new ObjectMetadata();
-            objectMetadata.setContentLength(file.getSize());
-            objectMetadata.setContentType(file.getContentType());
+        MultipartFile file = multipartFile;
 
-            try(InputStream inputStream=file.getInputStream()) {
-                amazonS3.putObject(new PutObjectRequest(bucket,fileName,inputStream,objectMetadata)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
-            }catch (IOException e){
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"파일 업로드에 실패했습니다.");
-            }
 
-            fileNameList.add(fileName);
-        });
+        String fileName= createFileName(file.getOriginalFilename());
+        ObjectMetadata objectMetadata=new ObjectMetadata();
+        objectMetadata.setContentLength(file.getSize());
+        objectMetadata.setContentType(file.getContentType());
 
-        return fileNameList;
+        try(InputStream inputStream=file.getInputStream()) {
+            amazonS3.putObject(new PutObjectRequest(bucket,fileName,inputStream,objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+        }catch (IOException e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"파일 업로드에 실패했습니다.");
+        }
+
+
+        return fileName;
     }
-
 
     public void deleteFile(String fileName){
         amazonS3.deleteObject(new DeleteObjectRequest(bucket,fileName));

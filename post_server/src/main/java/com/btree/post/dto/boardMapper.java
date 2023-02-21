@@ -7,14 +7,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class boardMapper {
 
-    public boardpost toEntity(boardrequestdto boardrequestdto, User user){
+    public boardpost toEntity(boardrequestdto boardrequestdto, userdto userdto){
         return boardpost.builder()
                 .title(boardrequestdto.getTitle())
-                .useremail(user.getUseremail())
-                .nickname(user.getNickname())
+                .useremail(userdto.getUseremail())
+                .nickname(userdto.getNickname())
                 .content(boardrequestdto.getContent())
                 .contentimg(boardrequestdto.getContentimg())
-                .locate(user.getLocate())
+                .locate(userdto.getLocate())
                 .build();
     }
 

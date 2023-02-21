@@ -2,6 +2,7 @@ package com.btree.post.service;
 
 import com.btree.post.dto.salesrequestdto;
 import com.btree.post.dto.salesresponsedto;
+import com.btree.post.dto.userdto;
 import com.btree.post.entity.salespost;
 import com.btree.post.exception.NotFoundException;
 import com.btree.post.repository.salesrepository;
@@ -96,7 +97,7 @@ public class salesserviceimpl implements salesserivce{
     }
 
     @Transactional
-    public salespost updateById (Long id, salesrequestdto salesrequestdto, User user){
+    public salespost updateById (Long id, salesrequestdto salesrequestdto, userdto userdto){
         salespost targetpost = findById(id);
         return save(targetpost.update(salesrequestdto));
     }
