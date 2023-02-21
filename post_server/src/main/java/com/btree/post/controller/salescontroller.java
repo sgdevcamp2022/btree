@@ -29,9 +29,9 @@ public class salescontroller {
 
 
     @PostMapping//게시글 작성
-    public ResponseEntity<String> createPost (@RequestBody salesrequestdto salesrequestdto,@RequestBody userdto userdto){
-        salespost salespost = saleservice.save(salesmapper.toEntity(salesrequestdto,userdto));
-        System.out.println(userdto.getLocate());
+    public ResponseEntity<String> createPost (@RequestBody salesrequestdto salesrequestdto){
+        salespost salespost = saleservice.save(salesmapper.toEntity(salesrequestdto));
+        System.out.println(salesrequestdto.getLocate());
         return ResponseEntity.ok()
                 .body("게시글 작성 성공");
     }
@@ -64,8 +64,8 @@ public class salescontroller {
     }
 
     @PutMapping("/{id}") // 게시글 수정
-    public void updatePost (@PathVariable Long id, @RequestBody salesrequestdto salesrequestdto,@RequestBody userdto userdto){
-        saleservice.updateById(id,salesrequestdto,userdto);
+    public void updatePost (@PathVariable Long id, @RequestBody salesrequestdto salesrequestdto){
+        saleservice.updateById(id,salesrequestdto);
     }
 
     @DeleteMapping("/{id}") // 게시글 삭제

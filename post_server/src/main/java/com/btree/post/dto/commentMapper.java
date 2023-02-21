@@ -1,15 +1,14 @@
 package com.btree.post.dto;
 
 import com.btree.post.entity.boardcomment;
-import com.btree.post.util.User;
 import org.springframework.stereotype.Service;
 
 @Service
 public class commentMapper {
-    public boardcomment toEntity(commentrequestdto commentrequestdto, userdto userdto){
+    public boardcomment toEntity(commentrequestdto commentrequestdto){
         return boardcomment.builder()
                 .content(commentrequestdto.getContent())
-                .username(userdto.getUseremail())
+                .username(commentrequestdto.getUsername())
                 .boardpostid(commentrequestdto.getBoardpostid())
                 .build();
     }

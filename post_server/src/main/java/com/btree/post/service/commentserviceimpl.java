@@ -1,11 +1,7 @@
 package com.btree.post.service;
 
-
-
-import com.btree.post.dto.boardresponsedto;
 import com.btree.post.dto.commentresponsedto;
 import com.btree.post.entity.boardcomment;
-import com.btree.post.entity.boardpost;
 import com.btree.post.repository.boardrepository;
 import com.btree.post.repository.commentrepository;
 import lombok.RequiredArgsConstructor;

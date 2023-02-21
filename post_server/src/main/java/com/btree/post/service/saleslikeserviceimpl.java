@@ -5,7 +5,6 @@ import com.btree.post.entity.saleslike;
 import com.btree.post.entity.salespost;
 import com.btree.post.repository.saleslikerepository;
 import com.btree.post.repository.salesrepository;
-import com.btree.post.util.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

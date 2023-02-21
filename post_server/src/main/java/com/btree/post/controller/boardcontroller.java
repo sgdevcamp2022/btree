@@ -28,9 +28,9 @@ public class boardcontroller {
     private final commentMapper commentmapper;
 
     @PostMapping//게시글 작성
-    public ResponseEntity<String> createPost(@RequestBody boardrequestdto boardrequestdto,@RequestBody userdto userdto){
+    public ResponseEntity<String> createPost(@RequestBody boardrequestdto boardrequestdto){
 
-        boardpost boardpost=boardservice.save(boardmapper.toEntity(boardrequestdto,userdto));
+        boardpost boardpost=boardservice.save(boardmapper.toEntity(boardrequestdto));
 
         return ResponseEntity.ok()
                 .body("게시글 작성 성공");
@@ -49,8 +49,8 @@ public class boardcontroller {
         return boardservice.findAllpostsbylocate(sortByPostid, userdto.getLocate());
     }
     @PutMapping("/{id}")//게시글 수정
-    public void updatePost(@PathVariable Long id,@RequestBody boardrequestdto boardrequestdto,@RequestBody userdto userdto){
-        boardservice.updateById(id,boardrequestdto,userdto);
+    public void updatePost(@PathVariable Long id,@RequestBody boardrequestdto boardrequestdto){
+        boardservice.updateById(id,boardrequestdto);
     }
     @DeleteMapping("/{id}")//게시글 삭제
     public void deletePost (@PathVariable Long id){
@@ -63,9 +63,9 @@ public class boardcontroller {
     }
 
     @PostMapping("/comment/{postid}") //댓글 작성
-    public ResponseEntity<commentresponsedto> createComment(@PathVariable("postid") Long postid, @RequestBody commentrequestdto commentrequestdto,@RequestBody userdto userdto){
+    public ResponseEntity<commentresponsedto> createComment(@PathVariable("postid") Long postid, @RequestBody commentrequestdto commentrequestdto){
         commentrequestdto.setBoardpostid(Math.toIntExact(postid));
-        boardcomment newcomment = commentmapper.toEntity(commentrequestdto,userdto);
+        boardcomment newcomment = commentmapper.toEntity(commentrequestdto);
         commentservice.commentsave(newcomment);
         commentresponsedto responsedto=commentmapper.fromEntity(newcomment);
         return ResponseEntity.ok()

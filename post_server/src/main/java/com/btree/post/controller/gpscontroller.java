@@ -20,7 +20,9 @@ public class gpscontroller {
     private final kakaoApi kakaoApi;
     private final distancecheck distancecheck;
     @GetMapping("/location")
-    public ResponseEntity<userdto> gps_auth(@RequestBody gpsrequestdto gpsrequestdto,@RequestBody userdto userdto){
+    public ResponseEntity<userdto> gps_auth(@RequestBody gpsrequestdto gpsrequestdto){
+
+        userdto userdto=new userdto();
 
         locationresponsedto georesponse=kakaoApi.getCoordinate(gpsrequestdto.getUseraddress()); //유저가 입력한 주소의 좌표 구하기
         locationresponsedto realresponse=kakaoApi.getlocation(gpsrequestdto.getUserx(),gpsrequestdto.getUsery()); //client에서 받은 유저의 실제 좌표

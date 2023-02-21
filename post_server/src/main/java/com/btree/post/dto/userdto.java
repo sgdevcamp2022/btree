@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 public class userdto {
     private String useremail;
 
+    @Builder.Default
     private boolean gpsauth=false;
 
     private String locate;

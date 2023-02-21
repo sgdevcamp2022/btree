@@ -2,11 +2,9 @@ package com.btree.post.service;
 
 import com.btree.post.dto.boardrequestdto;
 import com.btree.post.dto.boardresponsedto;
-import com.btree.post.dto.userdto;
 import com.btree.post.entity.boardpost;
 import com.btree.post.exception.NotFoundException;
 import com.btree.post.repository.boardrepository;
-import com.btree.post.util.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -21,7 +19,6 @@ import java.util.Optional;
 public class boardserviceimpl implements boardservice {
 
     private final boardrepository boardrepository;
-    private final User user;
 
     public boardpost save (boardpost boardpost){
         return boardrepository.save(boardpost);
@@ -68,7 +65,7 @@ public class boardserviceimpl implements boardservice {
     }
 
     @Transactional
-    public boardpost updateById(Long id, boardrequestdto boardrequestdto, userdto userdto){
+    public boardpost updateById(Long id, boardrequestdto boardrequestdto){
         boardpost targetpost=findById(id);
         return save(targetpost.update(boardrequestdto));
     }

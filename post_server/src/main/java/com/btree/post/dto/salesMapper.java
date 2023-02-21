@@ -1,7 +1,6 @@
 package com.btree.post.dto;
 
 import com.btree.post.entity.salespost;
-import com.btree.post.util.User;
 import org.springframework.stereotype.Service;
 
 
@@ -9,15 +8,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class salesMapper {
 
-    public salespost toEntity (salesrequestdto salesrequestdto, userdto userdto){
+    public salespost toEntity (salesrequestdto salesrequestdto){
         return salespost.builder()
-                .useremail(userdto.getUseremail())
-                .nickname(userdto.getNickname())
+                .useremail(salesrequestdto.getUseremail())
+                .nickname(salesrequestdto.getNickname())
                 .title(salesrequestdto.getTitle())
                 .content(salesrequestdto.getContent())
                 .salesimg(salesrequestdto.getSalesimg())
                 .category(salesrequestdto.getCategory())
-                .locate(userdto.getLocate())
+                .locate(salesrequestdto.getLocate())
                 .price(salesrequestdto.getPrice())
                 .ispoststate(salesrequestdto.getIspoststate())
                 .build();

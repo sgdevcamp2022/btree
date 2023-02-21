@@ -20,4 +20,7 @@ public class boardrequestdto {
 
     private String nickname;
 
+    @Builder.Default
+    private boolean gpsauth=false;
+
 }
