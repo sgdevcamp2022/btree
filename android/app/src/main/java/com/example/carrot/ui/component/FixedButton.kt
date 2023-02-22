@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.example.carrot.ui.theme.Carrot
 import com.example.carrot.ui.theme.Grey160
 
 @Composable
@@ -118,8 +119,21 @@ fun FavoriteBtnWithText(){
 
 
 @Composable
-fun SearchIconBtn(){
-    IconButton(onClick = { /* doSomething() */ }) {
+fun SearchIconBtn(
+){
+    IconButton(onClick = {  }) {
+        Icon(
+            imageVector = Icons.Rounded.Search,
+            contentDescription = "Need help"
+        )
+    }
+}
+
+@Composable
+fun SearchIconBtn(
+    navigateToSearch: () -> Unit
+){
+    IconButton(onClick = { navigateToSearch() }) {
         Icon(
             imageVector = Icons.Rounded.Search,
             contentDescription = "Need help"
@@ -183,11 +197,47 @@ fun BackIconBtn(
 }
 
 @Composable
+fun BackIconBtn(
+    color: Color,
+    onBack: () -> Unit,
+    toggleMainBottomBar: () -> Unit
+){
+    IconButton(onClick = {
+        onBack()
+        toggleMainBottomBar()
+    }) {
+        Icon(
+            imageVector = Icons.Rounded.ArrowBack,
+            contentDescription = "Go Back",
+            tint = color
+        )
+    }
+}
+
+@Composable
 fun CancelIconBtn(
     color: Color,
     onCancel: () -> Unit
 ){
     IconButton(onClick = { onCancel() }) {
+        Icon(
+            imageVector = Icons.Rounded.Close,
+            contentDescription = "Go Back",
+            tint = color
+        )
+    }
+}
+
+@Composable
+fun CancelIconBtn(
+    color: Color,
+    onCancel: () -> Unit,
+    toggleMainBottomBar: () -> Unit
+){
+    IconButton(onClick = {
+        onCancel()
+        toggleMainBottomBar()
+    }) {
         Icon(
             imageVector = Icons.Rounded.Close,
             contentDescription = "Go Back",
@@ -213,6 +263,27 @@ fun SettingIconBtn(){
         Icon(
             imageVector = Icons.Outlined.Settings,
             contentDescription = "Settings"
+        )
+    }
+}
+
+@Composable
+fun OutlinedLikeIconBtn(toggle: () -> Unit){
+    IconButton(onClick = { toggle() }) {
+        Icon(
+            imageVector = Icons.Outlined.FavoriteBorder,
+            contentDescription = "Outlined Like Button",
+        )
+    }
+}
+
+@Composable
+fun LikeIconBtn(toggle: () -> Unit){
+    IconButton(onClick = { toggle() }) {
+        Icon(
+            imageVector = Icons.Outlined.Favorite,
+            contentDescription = "Like Button",
+            tint = Carrot
         )
     }
 }
