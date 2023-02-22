@@ -1,7 +1,9 @@
 package com.example.carrot.ui.chat.chatRoom
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
@@ -16,7 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.carrot.model.ChattingRoom
+import com.example.carrot.model.ChatRoom
 import com.example.carrot.model.SampleData
 import com.example.carrot.ui.theme.CarrotTheme
 import com.example.carrot.ui.theme.Grey160
@@ -24,10 +26,13 @@ import com.example.carrot.ui.theme.Grey230
 
 @Composable
 fun ChattingRoomCard(
-    chattingRoom: ChattingRoom,
+    chattingRoom: ChatRoom,
     navigateToChattingRoom: (chattingRoomId: Long) -> Unit
 ){
-    Column {
+    Column(
+        modifier = Modifier
+            .clickable { Log.i("CHATROOM", "roomId : ${chattingRoom.chattingRoomId}") }
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -39,7 +44,7 @@ fun ChattingRoomCard(
                 Image(
                     modifier = Modifier
                         .size(width = 40.dp, height = 40.dp),
-                    painter = painterResource(id = chattingRoom.user.profileImage),
+                    painter = painterResource(id = com.example.carrot.R.drawable.default_profile),
                     contentDescription = "other's profile"
                 )
                 Column(
@@ -47,12 +52,12 @@ fun ChattingRoomCard(
                 ) {
                     Row() {
                         Text(
-                            text = chattingRoom.user.name + " ",
+                            text = chattingRoom.userName + " ",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = chattingRoom.user.location + " ",
+                            text = chattingRoom.location + " ",
                             style = MaterialTheme.typography.bodySmall,
                             color = Grey160
                         )
@@ -64,7 +69,7 @@ fun ChattingRoomCard(
                     }
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = chattingRoom.recentChat,
+                        text = "안녕하세요?",
                         style = MaterialTheme.typography.bodyMedium,
                     )
                 }
@@ -74,7 +79,7 @@ fun ChattingRoomCard(
                 modifier = Modifier
                     .size(width = 40.dp, height = 40.dp)
                     .clip(MaterialTheme.shapes.extraSmall),
-                painter = painterResource(id = chattingRoom.post.titleImage),
+                painter = painterResource(id = com.example.carrot.R.drawable.testpic),
                 contentScale = ContentScale.Crop,
                 contentDescription = "other's profile"
             )
@@ -83,18 +88,5 @@ fun ChattingRoomCard(
             modifier = Modifier.fillMaxWidth(),
             color = Grey230
         )
-    }
-}
-
-@Preview("chattingRoomCard preview")
-@Composable
-fun ChattingRoomCardPreview(){
-    CarrotTheme {
-        Surface {
-            ChattingRoomCard(
-                chattingRoom = SampleData.sampleChatRoom[3],
-                navigateToChattingRoom = {}
-            )
-        }
     }
 }
