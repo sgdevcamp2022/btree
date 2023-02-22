@@ -72,7 +72,7 @@ class UserProfile(UserBase):
     nickname: Optional[str]
     manner_temporature: float
     create_at: datetime
-    locate: str
+    locate: Optional[str]
 
     class Config:
         orm_mode = True
