@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.carrot.model.SalePost
@@ -27,7 +28,9 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeTopAppBar() {
+fun HomeTopAppBar(
+    navigateToSearch: () -> Unit
+) {
     TopAppBar(
         modifier = Modifier
             .drawColoredShadow(offsetX = 2.dp),
@@ -35,7 +38,7 @@ fun HomeTopAppBar() {
             LocationTitleBtn()
         },
         actions = {
-            SearchIconBtn()
+            SearchIconBtn(navigateToSearch)
             CategoryIconBtn()
             NotificationIconBtn()
         },
@@ -51,10 +54,11 @@ fun HomeTopAppBar() {
 fun HomeScreen(
     homeViewModel: HomeViewModel = HomeViewModel(),
     navigateToPost: (Long) -> Unit,
-    navigateToPostCreate: () -> Unit
+    navigateToPostCreate: () -> Unit,
+    navigateToSearch: () -> Unit
 ) {
     Scaffold (
-        topBar = {HomeTopAppBar()},
+        topBar = {HomeTopAppBar(navigateToSearch)},
         content = {
                 Box{
                     Column(
@@ -98,8 +102,9 @@ fun PostList(
     navigateToPost: (postId: Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     LaunchedEffect(Unit){
-        homeViewModel.setSalePostList()
+        homeViewModel.setSalePostList(context)
     }
     LazyColumn(
         modifier = modifier

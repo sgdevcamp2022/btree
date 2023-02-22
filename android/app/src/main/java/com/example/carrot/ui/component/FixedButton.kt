@@ -119,8 +119,21 @@ fun FavoriteBtnWithText(){
 
 
 @Composable
-fun SearchIconBtn(){
-    IconButton(onClick = { /* doSomething() */ }) {
+fun SearchIconBtn(
+){
+    IconButton(onClick = {  }) {
+        Icon(
+            imageVector = Icons.Rounded.Search,
+            contentDescription = "Need help"
+        )
+    }
+}
+
+@Composable
+fun SearchIconBtn(
+    navigateToSearch: () -> Unit
+){
+    IconButton(onClick = { navigateToSearch() }) {
         Icon(
             imageVector = Icons.Rounded.Search,
             contentDescription = "Need help"

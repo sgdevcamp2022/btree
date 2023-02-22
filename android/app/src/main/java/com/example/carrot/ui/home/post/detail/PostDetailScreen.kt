@@ -242,7 +242,7 @@ fun PostWriterInfo(post: SalePostResponse) {
                     .padding(start = 6.dp, top = 4.dp, bottom = 4.dp),
                 Arrangement.SpaceBetween
             ) {
-                Text(text = post.username, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
+                Text(text = post.nickname, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
                 Text(text = post.location, style = MaterialTheme.typography.labelSmall)
             }
         }

@@ -8,8 +8,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Chat
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,20 +23,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
 import com.example.carrot.R
-import com.example.carrot.model.SalePost
 import com.example.carrot.model.SalePostResponse
-import com.example.carrot.model.SampleData
-import com.example.carrot.ui.theme.*
+import com.example.carrot.ui.theme.Grey160
+import com.example.carrot.ui.theme.Grey245
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Duration
 import java.time.LocalDateTime
-import androidx.compose.runtime.livedata.observeAsState
+import java.time.format.DateTimeFormatter
 
 
 @Composable
@@ -95,7 +99,7 @@ fun PostCard(
                     Text(text = "-", style=MaterialTheme.typography.labelSmall, color = Grey160)
                     val postTime = calculateTime(postTime = post.updatedAt)
 //                    Text(text = "${post.updatedAt} 분 전", style=MaterialTheme.typography.labelSmall, color = Grey160)
-                    Text(text = postTime, style=MaterialTheme.typography.labelSmall, color = Grey160)
+                    Text(text = "${postTime}분 전", style=MaterialTheme.typography.labelSmall, color = Grey160)
                 }
                 Text(text = "${post.price}원", style = MaterialTheme.typography.titleSmall)
                 Row(modifier = Modifier
@@ -124,8 +128,16 @@ fun PostCard(
 
 fun calculateTime(postTime: String): String{
     val now = LocalDateTime.now()
+    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    val searchFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS'Z'")
+    val dateTime = try {
+        LocalDateTime.parse(postTime, formatter).plusHours(9)
+    } catch (e: Exception) {
+        LocalDateTime.parse(postTime, searchFormatter).plusHours(9)
+    }
+
     val duration = Duration.between(
-        LocalDateTime.parse(postTime),
+        dateTime,
         now
     )
     Log.i("TIME", "post time : $postTime")

@@ -18,7 +18,7 @@ class PostDetailViewModel(
         salePostId = 0,
         category = "",
         title = "",
-        username = "",
+        nickname = "",
         content = "",
         isPostState = "",
         price = 0,
@@ -26,7 +26,9 @@ class PostDetailViewModel(
         likeNum = 0,
         location = "",
         salesImg = "",
-        updatedAt = ""
+        updatedAt = "",
+        useremail = "",
+        viewCount = 0
     ))
 
     val salePostDetail = _salePostDetail

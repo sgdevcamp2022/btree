@@ -6,15 +6,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.carrot.AuthenticateViewModel
-import com.example.carrot.CarrotApp
 import com.example.carrot.ui.destinations.AuthNavDestination.ANNOUNCEMENT_SCREEN
 import com.example.carrot.ui.destinations.AuthNavDestination.AUTH_ROUTER
 import com.example.carrot.ui.destinations.AuthNavDestination.FIRST_ENTRANCE
-import com.example.carrot.ui.destinations.AuthNavDestination.IN_APP
 import com.example.carrot.ui.destinations.AuthNavDestination.SIGNIN_SCREEN
 import com.example.carrot.ui.destinations.AuthNavDestination.SIGNUP_SCREEN
 import com.example.carrot.ui.destinations.HomeNavDestination.HOME_ROUTE
 import com.example.carrot.ui.sign.firstEntrance.FirstEntranceScreen
+import com.example.carrot.ui.sign.login.LogInScreen
 import com.example.carrot.ui.sign.signup.SignUpScreen
 
 fun NavGraphBuilder.authNavGraph(

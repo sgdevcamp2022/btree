@@ -1,4 +1,4 @@
-package com.example.carrot.ui.sign
+package com.example.carrot.ui.sign.login
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.carrot.AuthenticateViewModel
 import com.example.carrot.ui.component.*
-import com.example.carrot.ui.sign.login.LoginScreenViewModel
 import com.example.carrot.ui.theme.*
 import kotlinx.coroutines.*
 

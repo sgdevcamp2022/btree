@@ -2,14 +2,16 @@ package com.example.carrot.api
 
 import com.example.carrot.model.SalePostRequest
 import com.example.carrot.model.SalePostResponse
+import com.example.carrot.model.SalePostUserModel
 import retrofit2.Response
 import retrofit2.http.*
 
 interface SalePostApi {
-    @GET("/post/api/posts")
+    @POST("/post/api/posts/list")
     suspend fun getSalePostList(
         @Query("page") page: Int,
-        @Query("size") size: Int
+        @Query("size") size: Int,
+        @Body salePostUserModel: SalePostUserModel
     ): Response<List<SalePostResponse>>
 
     @POST("/post/api/posts")

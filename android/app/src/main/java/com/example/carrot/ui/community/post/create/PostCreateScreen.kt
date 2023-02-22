@@ -1,6 +1,7 @@
 package com.example.carrot.ui.community.post.create
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.MagnifierStyle.Companion.Default
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -19,6 +20,7 @@ import com.example.carrot.ui.component.modifier.drawColoredShadow
 import com.example.carrot.ui.theme.Carrot
 import com.example.carrot.ui.theme.Grey210
 import kotlinx.coroutines.launch
+import java.time.format.TextStyle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,7 +52,7 @@ fun PostCreateScreenTopAppBar(
             TextButton(
                 onClick = {
                     coroutineScope.launch {
-                        postCreateViewModel.createComPost(context)
+                        postCreateViewModel.requestCreateCompost(context)
                     }
                     onCancel()
                     toggleMainBottomBar()
@@ -157,6 +159,10 @@ fun PostCreateTitle(
 ){
     OutlinedTextField(
         value = title,
+        textStyle = androidx.compose.ui.text.TextStyle(
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        ),
         onValueChange = {
             setTitle(it)
         },
@@ -176,7 +182,7 @@ fun PostCreateTitle(
             placeholderColor = Grey210
         ),
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
     )
 }
 

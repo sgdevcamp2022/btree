@@ -58,10 +58,11 @@ fun PostCreateScreenTopAppBar(
         }
         ,
         actions = {
+            val context = LocalContext.current
             TextButton(
                 onClick = {
                     GlobalScope.launch {
-                        postCreateViewModel.createSalePost()
+                        postCreateViewModel.createSalePost(context)
                     }
                     onCancel()
                     toggleMainBottomBar()

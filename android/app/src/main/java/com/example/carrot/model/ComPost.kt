@@ -24,9 +24,13 @@ data class ComPostResponse(
     @SerializedName("boardpostid")
     val comPostId: Long,
     val title: String,
-    val username: String,
+    val nickname: String,
+    @SerializedName("useremail")
+    val userEmail: String,
     val content: String,
     val commentNum: Int,
+    val likesNum: Int,
+    val viewcount: Int,
     @SerializedName("locate")
     val location: String,
     @SerializedName("contentimg")
@@ -40,6 +44,37 @@ data class ComPostRequest(
     val content: String,
     @SerializedName("contentimg")
     val contentImg: String,
+    val nickname: String,
+    @SerializedName("useremail")
+    val userEmail: String,
+    @SerializedName("locate")
+    val location: String,
+    val gpsauth: Boolean
+)
+
+data class ComPostUserModel(
+    val gpsauth: Boolean,
+    val locate: String,
+    val nickname: String,
+    val useremail: String
+)
+
+data class CommentResponse(
+    @SerializedName("boardcommentid")
+    val boardCommentId: Long,
+    @SerializedName("boardpostid")
+    val boardPostId: Long,
+    @SerializedName("commenttime")
+    val commentTime: String,
+    val content : String,
+    val username: String
+)
+
+
+data class CommentRequest(
+    @SerializedName("boardpostid")
+    val boardPostId: Long,
+    val content: String,
     val username: String
 )
 //data class ComPost(

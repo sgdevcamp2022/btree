@@ -1,6 +1,8 @@
 package com.example.carrot.api
 
 import com.example.carrot.model.ImageResponse
+import com.example.carrot.model.PostResponse
+import com.example.carrot.model.PostSource
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -20,6 +22,11 @@ interface PostUtilApi {
     suspend fun uploadPostImage(
         @Part files: MultipartBody.Part
     ): Response<ImageResponse>
+
+    @GET("/search/{data}")
+    suspend fun searchSalePost(
+        @Path("data") data: String
+    ): Response<PostResponse>
 
     @DELETE("/post/api/s3")
     suspend fun deletePostImage()

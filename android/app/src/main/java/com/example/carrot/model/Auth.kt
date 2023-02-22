@@ -44,7 +44,8 @@ data class GetMyInfoResponse(
     val nickname: String,
     @SerializedName("manner_temporature")
     val manner_temp: Float,
-    val create_at: String
+    val create_at: String,
+    val locate: String
 )
 
 class TokenStore(

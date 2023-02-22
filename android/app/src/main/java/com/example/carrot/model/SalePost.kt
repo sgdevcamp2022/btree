@@ -31,11 +31,16 @@ data class SalePostResponse(
     val salePostId: Long,
     val category: String,
     val title: String,
-    val username: String,
+    val useremail: String,
+    val nickname: String,
+    @SerializedName("viewcount")
+    val viewCount: Int,
     val content: String,
     val isPostState: String,
     val price: Int,
+    @SerializedName("chatnum")
     val chatNum: Int,
+    @SerializedName("likenum")
     val likeNum: Int,
     @SerializedName("locate")
     val location: String,
@@ -47,12 +52,22 @@ data class SalePostResponse(
 
 data class SalePostRequest(
     val category: String,
-    val title: String,
     val content: String,
+    val gpsauth: Boolean,
+    val locate: String,
+    val nickname: String,
+    val useremail: String,
+    val title: String,
     val price: Int,
     @SerializedName("salesimg")
-    val salesImg: String,
-    val isPostState: String
+    val salesImg: String
+)
+
+data class SalePostUserModel(
+    val gpsauth: Boolean,
+    val locate: String,
+    val nickname: String,
+    val useremail: String
 )
 
 data class ImageResponse(

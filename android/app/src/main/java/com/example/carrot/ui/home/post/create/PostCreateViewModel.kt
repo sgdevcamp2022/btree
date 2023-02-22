@@ -11,9 +11,11 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.net.toFile
 import androidx.lifecycle.ViewModel
+import com.example.carrot.api.RetrofitClient
 import com.example.carrot.api.RetrofitClient.PostUtilApiService
 import com.example.carrot.api.RetrofitClient.SalePostApiService
 import com.example.carrot.model.SalePostRequest
+import com.example.carrot.model.TokenStore
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -51,24 +53,42 @@ class PostCreateViewModel(
 
     private val imageUri = mutableStateOf("")
 
-    suspend fun createSalePost() {
-        val salePostRequest = SalePostRequest(
-            category = "test",
-            title = _title.value,
-            content = _contents.value,
-            price = _price.value.toInt(),
-            salesImg = imageUri.value,
-            isPostState = "RESERVE"
-        )
-        Log.i("CREATE SALEPOST", "saleImg : ${salePostRequest.salesImg}, imageUri : ${imageUri.value}")
-        try {
-            val response = SalePostApiService.createSalePost(salePostRequest = salePostRequest)
-            when (response.code()) {
-                200 -> Log.i("CREATE SALEPOST", "create sale post success")
-                else -> Log.i("CREATE SALEPOST", "create sale post failed : ${response.code()}")
+    suspend fun createSalePost(context: Context) {
+        val tokenStore = TokenStore(context)
+        tokenStore.getAccessToken.collect {
+            try {
+                val userResponse = RetrofitClient.authApiService.getMyInfo("Bearer $it")
+                when(userResponse.code()){
+                    200 -> {
+                        val salePostRequest = SalePostRequest(
+                            category = "test",
+                            title = _title.value,
+                            content = _contents.value,
+                            price = _price.value.toInt(),
+                            salesImg = imageUri.value,
+                            gpsauth = true,
+                            locate = "개신동",
+                            nickname = userResponse.body()?.nickname!!,
+                            useremail = userResponse.body()?.email!!
+                        )
+                        Log.i("CREATE SALEPOST", "saleImg : ${salePostRequest.salesImg}, imageUri : ${imageUri.value}")
+                        try {
+                            val response = SalePostApiService.createSalePost(salePostRequest = salePostRequest)
+                            when (response.code()) {
+                                200 -> Log.i("CREATE SALEPOST", "create sale post success")
+                                else -> Log.i("CREATE SALEPOST", "create sale post failed : ${response.code()}")
+                            }
+                        } catch (e: Exception) {
+                            Log.i("CREATE SALEPOST", "create sale post failed : $e")
+                        }
+                    }
+                    else -> {
+                        Log.e("CREATE SALEPOST", "responsing user profile failed: ${userResponse.code()}")
+                    }
+                }
+            } catch (e: Exception){
+                Log.e("CREATE SALEPOST", "get user profile failed: $e")
             }
-        } catch (e: Exception) {
-            Log.i("CREATE SALEPOST", "create sale post failed : $e")
         }
     }
 

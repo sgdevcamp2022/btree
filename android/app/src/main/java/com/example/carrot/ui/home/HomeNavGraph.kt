@@ -6,8 +6,10 @@ import com.example.carrot.ui.destinations.HomeNavDestination.HOME_ROUTE
 import com.example.carrot.ui.destinations.HomeNavDestination.HOME_ROUTER
 import com.example.carrot.ui.destinations.HomeNavDestination.POST_CREATE_ROUTE
 import com.example.carrot.ui.destinations.HomeNavDestination.POST_ROUTE
+import com.example.carrot.ui.destinations.HomeNavDestination.SEARCH_ROUTE
 import com.example.carrot.ui.home.post.create.PostCreateScreen
 import com.example.carrot.ui.home.post.detail.PostDetailScreen
+import com.example.carrot.ui.home.post.search.SearchScreen
 
 fun NavGraphBuilder.homeNavGraph(
     navController: NavController,
@@ -19,7 +21,8 @@ fun NavGraphBuilder.homeNavGraph(
         composable(HOME_ROUTE){
             HomeScreen(
                 navigateToPost = homeAction.navigateToPost,
-                navigateToPostCreate = homeAction.navigateToPostCreate
+                navigateToPostCreate = homeAction.navigateToPostCreate,
+                navigateToSearch = homeAction.navigateToSearch
             )
         }
         composable(
@@ -39,6 +42,12 @@ fun NavGraphBuilder.homeNavGraph(
                 toggleMainBottomBar = toggleMainBottomBar
             )
         }
+        composable(SEARCH_ROUTE){
+            SearchScreen(
+                onBack = homeAction.upPress,
+                navigateToPost = homeAction.navigateToPost
+            )
+        }
     }
 }
 
@@ -50,6 +59,10 @@ class HomeAction(navController: NavController){
 
     val navigateToPostCreate: () -> Unit = {
         navController.navigate(POST_CREATE_ROUTE)
+    }
+
+    val navigateToSearch: () -> Unit = {
+        navController.navigate(SEARCH_ROUTE)
     }
 
     val upPress: () -> Unit = {
