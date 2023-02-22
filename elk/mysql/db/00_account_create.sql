@@ -1,2 +1,0 @@
-DROP SCHEMA IF EXISTS account;
-CREATE SCHEMA account;

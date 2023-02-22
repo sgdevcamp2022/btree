@@ -14,5 +14,13 @@ public class boardrequestdto {
 
     private String contentimg;
 
-    private String username;
+    private String useremail;
+
+    private String locate;
+
+    private String nickname;
+
+    @Builder.Default
+    private boolean gpsauth=false;
+
 }

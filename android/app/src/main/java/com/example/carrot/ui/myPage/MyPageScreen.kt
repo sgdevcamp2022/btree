@@ -8,10 +8,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -47,6 +49,7 @@ fun MypageTopAppBar(){
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyPageScreen(
+    myPageScreenViewModel: MyPageScreenViewModel = MyPageScreenViewModel()
 ) {
     Scaffold(
         topBar = { MypageTopAppBar() },
@@ -57,19 +60,27 @@ fun MyPageScreen(
                     .fillMaxSize()
                     .background(Color.White)
             ) {
-                MyPageCategoryList()
+                MyPageCategoryList(
+                    myPageScreenViewModel = myPageScreenViewModel
+                )
             }
         }
     )
 }
 
 @Composable
-fun MyPageCategoryList(){
+fun MyPageCategoryList(
+    myPageScreenViewModel: MyPageScreenViewModel
+){
+    val context = LocalContext.current
+    LaunchedEffect(Unit){
+        myPageScreenViewModel.setNickname(context)
+    }
     Column(
         modifier = Modifier
             .padding(horizontal = 10.dp)
     ) {
-        MyProfile()
+        MyProfile(myPageScreenViewModel.nickname.value)
         Divider(
             modifier = Modifier.fillMaxWidth(),
             color = Grey230
@@ -92,7 +103,9 @@ fun MyPageCategoryList(){
 }
 
 @Composable
-fun MyProfile(){
+fun MyProfile(
+    myNickname: String
+){
     Row(
         modifier = Modifier
             .padding(vertical = 8.dp)
@@ -111,7 +124,7 @@ fun MyProfile(){
             )
             Spacer(modifier = Modifier.width(10.dp))
             Text(
-                text = SampleData.sampleUser[0].name,
+                text = myNickname,
                 fontWeight = FontWeight.Black
             )
         }

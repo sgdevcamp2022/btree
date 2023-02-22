@@ -1,27 +1,43 @@
 package com.example.carrot.ui.community
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
+import androidx.navigation.*
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
-import com.example.carrot.model.SampleData
-import com.example.carrot.ui.community.post.PostScreen
+import com.example.carrot.ui.community.post.create.PostCreateScreen
+import com.example.carrot.ui.community.post.detail.PostDetailScreen
 import com.example.carrot.ui.destinations.CommunityNavDestination
-import com.example.carrot.ui.destinations.CommunityNavDestination.POST_ID
+import com.example.carrot.ui.destinations.CommunityNavDestination.COMMUNITY_ROUTE
+import com.example.carrot.ui.destinations.CommunityNavDestination.COMMUNITY_ROUTER
+import com.example.carrot.ui.destinations.CommunityNavDestination.POST_CREATE_ROUTE
+import com.example.carrot.ui.destinations.CommunityNavDestination.POST_ROUTE
 
-fun NavGraphBuilder.communityNavGraph(navController: NavController, communityAction: CommunityAction){
+fun NavGraphBuilder.communityNavGraph(
+    navController: NavController,
+    communityAction: CommunityAction,
+    toggleMainBottomBar: () -> Unit
+){
 
-    navigation(startDestination = CommunityNavDestination.COMMUNITY_ROUTE, route = CommunityNavDestination.COMMUNITY_ROUTER) {
-        composable(CommunityNavDestination.COMMUNITY_ROUTE){
+    navigation(startDestination = COMMUNITY_ROUTE, route = COMMUNITY_ROUTER) {
+        composable(COMMUNITY_ROUTE){
             CommunityScreen(
-                navigateToPost = communityAction.navigateToPost
+                navigateToPost = communityAction.navigateToPost,
+                navigateToPostCreate = communityAction.navigateToPostCreate
             )
         }
-        composable("${CommunityNavDestination.POST_ROUTE}/{$POST_ID}") { backStackEntry ->
-            val postId = backStackEntry.arguments?.getLong(POST_ID)
-            PostScreen(
-                post = SampleData.sampleComPost[postId!!.toInt()],
-                onBack = communityAction.upPress
+        composable(
+            route = "${POST_ROUTE}/{postId}",
+            arguments = listOf(navArgument("postId"){type = NavType.LongType})
+        ) { backStackEntry ->
+            val postId = backStackEntry.arguments?.getLong("postId")!!
+            PostDetailScreen(
+                postId = postId,
+                onBack = communityAction.upPress,
+                toggleMainBottomBar = toggleMainBottomBar
+            )
+        }
+        composable(POST_CREATE_ROUTE){
+            PostCreateScreen(
+                onCancel = communityAction.upPress,
+                toggleMainBottomBar = toggleMainBottomBar
             )
         }
     }
@@ -30,6 +46,10 @@ fun NavGraphBuilder.communityNavGraph(navController: NavController, communityAct
 class CommunityAction(navController: NavController) {
     val navigateToPost: (Long) -> Unit = { postId ->
         navController.navigate("${CommunityNavDestination.POST_ROUTE}/${postId}")
+    }
+
+    val navigateToPostCreate: () -> Unit = {
+        navController.navigate(POST_CREATE_ROUTE)
     }
 
     val upPress: () -> Unit = {

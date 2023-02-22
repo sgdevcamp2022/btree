@@ -75,7 +75,7 @@ fun MyChat(
 
     ) {
         Column() {
-            Text(text = if (chat.readOrNot) " " else "읽음")
+//            Text(text = if (chat.readOrNot) " " else "읽음")
             Text(text = "오전" + chat.createdAt.toString())
         }
         Surface(
@@ -96,7 +96,7 @@ fun MyChat(
 fun MyChatPreview() {
     CarrotTheme {
         Surface {
-            MyChat(chat = SampleData.sampleChatRoom[2].chatList[3])
+
         }
     }
 }

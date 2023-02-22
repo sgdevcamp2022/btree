@@ -44,12 +44,14 @@ class Token(BaseModel):
 class email_token(BaseModel):
     token: str
 
-class RefreshIncludedToken(Token):
-    refresh_token: str
 
+class RefreshToken(BaseModel):
+    refresh_token: str
 class TokenData(BaseModel):
     email: Union[str, None] = None
 
+class RefreshIncludedToken(Token):
+    refresh_token: str
 
 class TokenDataModel(BaseModel):
     access_token: str
@@ -70,6 +72,7 @@ class UserProfile(UserBase):
     nickname: Optional[str]
     manner_temporature: float
     create_at: datetime
+    locate: Optional[str]
 
     class Config:
         orm_mode = True
@@ -79,3 +82,31 @@ class UserNickname(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class UserLocate(BaseModel):
+    new_locate: str
+
+    class Config:
+        orm_mode = True
+        
+class UserCategory(BaseModel):
+    digitals: Optional[bool] = True
+    appliances: Optional[bool] = True
+    funitures: Optional[bool] = True
+    livings: Optional[bool] = True
+    kids:  Optional[bool] = True
+    kid_books: Optional[bool] = True
+    woman_clothes: Optional[bool] = True
+    woman_things: Optional[bool] = True
+    man_things: Optional[bool] = True
+    beauty: Optional[bool] = True
+    sports: Optional[bool] = True
+    hobby_game_recodes: Optional[bool] = True
+    books: Optional[bool] = True
+    tickets: Optional[bool] = True
+    processed_food: Optional[bool] = True
+    pets: Optional[bool] = True
+    plants: Optional[bool] = True
+    others: Optional[bool] = True
+    buys: Optional[bool] = True

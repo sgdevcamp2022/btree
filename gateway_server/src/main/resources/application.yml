@@ -12,6 +12,11 @@ spring:
           uri: http://localhost:8080
           predicates:
             - Path=/post/**
+        - id: search-server
+          uri: http://localhost:8456
+          predicates:
+            - Path=/search/**
+
         - id: chat-server
           uri: http://localhost:8081
           predicates:

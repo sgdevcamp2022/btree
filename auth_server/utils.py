@@ -25,8 +25,8 @@ ALGORITHM = "HS256"
 # openssl rand -hex 32
 SECRET_KEY = "07f7576d46d2871ba587ceabd235f9234967ac12033c47d8047662c21c59732b"
 SECRET_REFRESH_KEY = "7c49dfce5312a8a12d4e159f464b8d1ac7f4af35c634fd45168859c4d0bd0cf9"
-ACCESS_TOKEN_EXPIRE_MINUTES = 1
-REFRESH_TOKEN_EXPIRE_MINUTES = 3
+ACCESS_TOKEN_EXPIRE_MINUTES = 10 # 10분
+REFRESH_TOKEN_EXPIRE_MINUTES = 1440*14 # 2주
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -159,7 +159,7 @@ def email_auth(email):
     try:
         yag = yagmail.SMTP("wlsdn2749@gmail.com", oauth2_file="./settings/oauth2_creds.json")
         yag.send(to=email, subject="당근마켓 Clone Projects 이메일 인증을 해주세요!", 
-            contents = ["<h1>이 링크는 10분간 유효합니다.</h1>", f'<a href="http://localhost:8000/email_verify_token/{encoded_token}/">인증을 위해서 이것을 클릭 해주세요</a>']
+            contents = ["<h1>이 링크는 10분간 유효합니다.</h1>", f'<a href="http://localhost:8000/auth/email_verify_token/{encoded_token}/">인증을 위해서 이것을 클릭 해주세요</a>']
         )
         rd.set(token, email, timedelta(minutes=10))
         return JSONResponse(

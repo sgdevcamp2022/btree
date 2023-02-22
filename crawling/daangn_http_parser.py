@@ -41,6 +41,7 @@ def daangn_http_parsing(start_idx: int, count: int):
             content = soup.find('div', attrs={'property': "schema:description"}).text
             nickname = soup.find('div', attrs={'id': "nickname"}).text
             region_name = soup.find('div', attrs={'id': "region-name"}).text
+            img_url = soup.find('img', attrs={'class': "portrait"}).attrs['data-lazy']
             update_time = datetime.now().timestamp()
         except:
             continue
@@ -68,6 +69,7 @@ def daangn_http_parsing(start_idx: int, count: int):
         create_time = int(update_time) - make_realtime(deduct_time_delta, num)
         # except:
         #     create_time = update_time
+        img_url = img_url
         update_time = update_time
     
         
@@ -81,6 +83,7 @@ def daangn_http_parsing(start_idx: int, count: int):
             'nickname': nickname,
             'region_name': region_name,
             'create_time': create_time,
+            'img_url': img_url,
             'update_time': update_time,
         }
 

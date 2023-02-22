@@ -21,4 +21,13 @@ public class salesrequestdto {
 
     private salesstate ispoststate;
 
+    private String useremail;
+
+    @Builder.Default
+    private boolean gpsauth=false;
+
+    private String locate;
+
+    private String nickname;
+
 }

@@ -13,6 +13,9 @@ def get_user_by_email(db: Session, email: str):
 def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all
 
+def get_user_category_by_user(db: Session, user: models.User):
+    return db.query(models.UserCategory).filter(models.UserCategory.usercategoryId == user.userId).first()
+
 def create_user(db : Session, user: schemas.UserCreate):
     db_user = models.User(email=user['email'], hashed_password = user['hashed_password'], is_active = False)
     db.add(db_user) # add instance object to session
@@ -41,6 +44,34 @@ def update_user_nickname(db: Session, user: models.User , new_nickname: str):
         )    
     return user
 
+def update_user_locate(db: Session, user: models.User , new_locate: str):
+    if user:
+        user.locate = new_locate
+        db.commit()
+        db.refresh(user)
+        print(new_locate, user.locate)
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="user not found"
+        )    
+    return user
+
+def create_usercategory(db: Session, userId: int):
+    db_category = models.UserCategory(
+        usercategoryId = userId,
+    )
+    db.add(db_category)
+    db.commit()
+    db.refresh(db_category)
+    return db_category
+
+def update_usercategory(db: Session, usercategory: models.UserCategory, new_usercategory: schemas.UserCategory):    
+    for key, value in new_usercategory.dict(exclude_unset=True).items():
+        setattr(usercategory, key, value)
+    db.commit()
+    db.refresh(usercategory)
+    return usercategory
 def get_items(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Item).offset(skip).limit(limit).all()
 

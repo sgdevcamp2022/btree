@@ -1,6 +1,7 @@
 package com.example.carrot.ui.home
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -8,8 +9,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.carrot.model.SalePost
@@ -25,7 +28,9 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeTopAppBar() {
+fun HomeTopAppBar(
+    navigateToSearch: () -> Unit
+) {
     TopAppBar(
         modifier = Modifier
             .drawColoredShadow(offsetX = 2.dp),
@@ -33,7 +38,7 @@ fun HomeTopAppBar() {
             LocationTitleBtn()
         },
         actions = {
-            SearchIconBtn()
+            SearchIconBtn(navigateToSearch)
             CategoryIconBtn()
             NotificationIconBtn()
         },
@@ -49,17 +54,21 @@ fun HomeTopAppBar() {
 fun HomeScreen(
     homeViewModel: HomeViewModel = HomeViewModel(),
     navigateToPost: (Long) -> Unit,
-    navigateToPostCreate: () -> Unit
+    navigateToPostCreate: () -> Unit,
+    navigateToSearch: () -> Unit
 ) {
     Scaffold (
-        topBar = {HomeTopAppBar()},
+        topBar = {HomeTopAppBar(navigateToSearch)},
         content = {
                 Box{
                     Column(
-                        modifier = Modifier.padding(top = 60.dp, bottom = 70.dp)
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 60.dp, bottom = 70.dp)
+                            .background(Color.White)
                     ) {
                         PostList(
-                            posts = SampleData.sampleSalePost,
+                            homeViewModel = homeViewModel,
                             navigateToPost = navigateToPost
                         )
                     }
@@ -83,20 +92,24 @@ fun HomeScreen(
                         Text(text = "글쓰기", fontWeight = FontWeight.Bold)
                     }
                 }                
-            }
+            },
         )
 }
 
 @Composable
 fun PostList(
-    posts: List<SalePost>,
+    homeViewModel: HomeViewModel,
     navigateToPost: (postId: Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    LaunchedEffect(Unit){
+        homeViewModel.setSalePostList(context)
+    }
     LazyColumn(
         modifier = modifier
     ) {
-        items(posts){ post ->
+        items(homeViewModel.salePostList){ post ->
             PostCard(
                 post = post,
                 navigateToPost = navigateToPost

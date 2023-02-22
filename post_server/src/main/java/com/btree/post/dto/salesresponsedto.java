@@ -3,6 +3,7 @@ package com.btree.post.dto;
 import com.btree.post.entity.salesstate;
 import lombok.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Builder
@@ -21,17 +22,21 @@ public class salesresponsedto {
 
     private int price;
 
-    private String username;
+    private String useremail;
 
     private String category;
 
     private String locate;
 
-    private LocalDateTime updatetime;
+    private Timestamp updatetime;
 
     private int likenum;
 
     private int chatnum;
 
     private salesstate ispoststate;
+
+    private String nickname;
+
+    private int viewcount;
 }

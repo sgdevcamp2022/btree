@@ -27,4 +27,8 @@ public interface boardrepository extends JpaRepository<boardpost,Long> {
     @Modifying
     @Query("update boardpost a set a.commentnum = a.commentnum - 1 where a.boardpostid = :id")
     void minuscommentnum (@Param("id") Long id);
+
+    @Modifying
+    @Query("update boardpost a set a.viewcount = a.viewcount + 1 where a.boardpostid = :id")
+    void viewCountUp (@Param("id") Long id);
 }

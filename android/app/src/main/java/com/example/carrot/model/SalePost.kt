@@ -2,6 +2,7 @@ package com.example.carrot.model
 
 import androidx.annotation.DrawableRes
 import com.example.carrot.R
+import com.google.gson.annotations.SerializedName
 
 data class SalePost(
     val postId: Long,
@@ -25,6 +26,53 @@ data class SalePost(
     @DrawableRes val titleImage: Int = R.drawable.testpic
 )
 
+data class SalePostResponse(
+    @SerializedName("salespostid")
+    val salePostId: Long,
+    val category: String,
+    val title: String,
+    val useremail: String,
+    val nickname: String,
+    @SerializedName("viewcount")
+    val viewCount: Int,
+    val content: String,
+    val isPostState: String,
+    val price: Int,
+    @SerializedName("chatnum")
+    val chatNum: Int,
+    @SerializedName("likenum")
+    val likeNum: Int,
+    @SerializedName("locate")
+    val location: String,
+    @SerializedName("salesimg")
+    val salesImg: String,
+    @SerializedName("updatetime")
+    val updatedAt: String,
+)
+
+data class SalePostRequest(
+    val category: String,
+    val content: String,
+    val gpsauth: Boolean,
+    val locate: String,
+    val nickname: String,
+    val useremail: String,
+    val title: String,
+    val price: Int,
+    @SerializedName("salesimg")
+    val salesImg: String
+)
+
+data class SalePostUserModel(
+    val gpsauth: Boolean,
+    val locate: String,
+    val nickname: String,
+    val useremail: String
+)
+
+data class ImageResponse(
+    val path: String
+)
 //data class SalePost(
 //    val id: Long,
 //    val title: String,

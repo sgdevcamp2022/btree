@@ -1,42 +1,51 @@
 package com.example.carrot.ui.home
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
+import androidx.navigation.*
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
-import com.example.carrot.Home
-import com.example.carrot.model.SampleData
-import com.example.carrot.ui.destinations.HomeNavDestination
 import com.example.carrot.ui.destinations.HomeNavDestination.HOME_ROUTE
 import com.example.carrot.ui.destinations.HomeNavDestination.HOME_ROUTER
 import com.example.carrot.ui.destinations.HomeNavDestination.POST_CREATE_ROUTE
-import com.example.carrot.ui.destinations.HomeNavDestination.POST_ID
-import com.example.carrot.ui.home.post.PostCreateScreen
-import com.example.carrot.ui.home.post.PostScreen
+import com.example.carrot.ui.destinations.HomeNavDestination.POST_ROUTE
+import com.example.carrot.ui.destinations.HomeNavDestination.SEARCH_ROUTE
+import com.example.carrot.ui.home.post.create.PostCreateScreen
+import com.example.carrot.ui.home.post.detail.PostDetailScreen
+import com.example.carrot.ui.home.post.search.SearchScreen
 
-fun NavGraphBuilder.homeNavGraph(navController: NavController, homeAction: HomeAction){
+fun NavGraphBuilder.homeNavGraph(
+    navController: NavController,
+    homeAction: HomeAction,
+    toggleMainBottomBar: () -> Unit
+){
 
     navigation(startDestination = HOME_ROUTE, route = HOME_ROUTER) {
         composable(HOME_ROUTE){
             HomeScreen(
                 navigateToPost = homeAction.navigateToPost,
-                navigateToPostCreate = homeAction.navigateToPostCreate
+                navigateToPostCreate = homeAction.navigateToPostCreate,
+                navigateToSearch = homeAction.navigateToSearch
             )
         }
-        composable("${HomeNavDestination.POST_ROUTE}/{$POST_ID}"){ backStackEntry ->
-            val postId = backStackEntry.arguments?.getLong(POST_ID)
-            PostScreen(
-                post = SampleData.sampleSalePost[postId!!.toInt()],
-                onBack = homeAction.upPress
+        composable(
+            route = "$POST_ROUTE/{postId}",
+            arguments = listOf(navArgument("postId"){type = NavType.LongType})
+        ){ backStackEntry ->
+            val postId = backStackEntry.arguments?.getLong("postId")!!
+            PostDetailScreen(
+                postId = postId,
+                onBack = homeAction.upPress,
+                toggleMainBottomBar = toggleMainBottomBar
             )
         }
         composable(POST_CREATE_ROUTE){
             PostCreateScreen(
-                onCancel = homeAction.upPress
+                onCancel = homeAction.upPress,
+                toggleMainBottomBar = toggleMainBottomBar
+            )
+        }
+        composable(SEARCH_ROUTE){
+            SearchScreen(
+                onBack = homeAction.upPress,
+                navigateToPost = homeAction.navigateToPost
             )
         }
     }
@@ -44,12 +53,16 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController, homeAction: HomeA
 
 // TODO: 인터페이스로 만들 것
 class HomeAction(navController: NavController){
-    val navigateToPost: (Long) -> Unit = { postId ->
-        navController.navigate("${HomeNavDestination.POST_ROUTE}/${postId}")
+    val navigateToPost: (Long) -> Unit = { test ->
+        navController.navigate("$POST_ROUTE/$test")
     }
 
     val navigateToPostCreate: () -> Unit = {
         navController.navigate(POST_CREATE_ROUTE)
+    }
+
+    val navigateToSearch: () -> Unit = {
+        navController.navigate(SEARCH_ROUTE)
     }
 
     val upPress: () -> Unit = {

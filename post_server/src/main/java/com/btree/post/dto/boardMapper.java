@@ -1,19 +1,19 @@
 package com.btree.post.dto;
 
 import com.btree.post.entity.boardpost;
-import com.btree.post.util.User;
 import org.springframework.stereotype.Service;
 
 @Service
 public class boardMapper {
 
-    public boardpost toEntity(boardrequestdto boardrequestdto, User user){
+    public boardpost toEntity(boardrequestdto boardrequestdto){
         return boardpost.builder()
                 .title(boardrequestdto.getTitle())
-                .username(user.getUsername())
+                .useremail(boardrequestdto.getUseremail())
+                .nickname(boardrequestdto.getNickname())
                 .content(boardrequestdto.getContent())
                 .contentimg(boardrequestdto.getContentimg())
-                .locate(user.getLocate())
+                .locate(boardrequestdto.getLocate())
                 .build();
     }
 
@@ -23,10 +23,13 @@ public class boardMapper {
                 .boardpostid(boardpost.getBoardpostid())
                 .content(boardpost.getContent())
                 .contentimg(boardpost.getContentimg())
-                .username(boardpost.getUsername())
+                .nickname(boardpost.getNickname())
+                .useremail(boardpost.getUseremail())
                 .commentnum(boardpost.getCommentnum())
                 .updatetime(boardpost.getUpdatetime())
                 .locate(boardpost.getLocate())
+                .likenum(boardpost.getLikenum())
+                .viewcount(boardpost.getViewcount())
                 .build();
     }
 

@@ -16,7 +16,7 @@ import router
 
 models.Base.metadata.create_all(bind=engine)
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
     
 app = FastAPI()
 
@@ -44,7 +44,7 @@ def get_db():
     finally:
         db.close()
 
-@app.post("/token", response_model=schemas.RefreshIncludedToken)
+@app.post("/auth/token", response_model=schemas.RefreshIncludedToken)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),
                                  db: Session = Depends(get_db)):                                 
     user = utils.authenticate_user(db, form_data.username, form_data.password)
@@ -67,10 +67,11 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     )
     return {"refresh_token": refresh_token, "access_token" : access_token, "token_type" : "bearer"}
 
-@app.post("/generate_access_token/", response_model=schemas.Token)
-async def re_issue_access_token(token: str = Depends(oauth2_scheme), # access_token
-                                refresh_token: str = None,
+@app.post("/auth/generate_access_token/", response_model=schemas.Token)
+async def re_issue_access_token(refresh: schemas.RefreshToken,
+                                token: str = Depends(oauth2_scheme), # access_token                                
                                 db: Session = Depends(get_db)):
+    refresh_token = refresh.refresh_token
     if not utils.is_valid_accessToken(token):
         if rd.exists(refresh_token):
             userId = rd.get(refresh_token)
@@ -94,7 +95,7 @@ async def re_issue_access_token(token: str = Depends(oauth2_scheme), # access_to
         )
     
 
-@app.post('/register', summary="Create new user", response_model=schemas.User)
+@app.post('/auth/register', summary="Create new user", response_model=schemas.User)
 async def create_user(data: schemas.UserCreate, db : Session = Depends(get_db)):
     print(data)
     # querying database to check if user already exist
@@ -112,7 +113,7 @@ async def create_user(data: schemas.UserCreate, db : Session = Depends(get_db)):
     # register_verify(created_user, db)
     return created_user # id, is_active, UserBase....
 
-@app.post('/register_verify', summary="Token Authentication", response_model=schemas.User)
+@app.post('/auth/register_verify', summary="Token Authentication", response_model=schemas.User)
 async def register_verify(tokendata: schemas.TokenDataModel, db : Session = Depends(get_db)):
     mytoken = utils.check_my_token(tokendata.email, tokendata.access_token, db)
     if(mytoken):
@@ -124,7 +125,7 @@ async def register_verify(tokendata: schemas.TokenDataModel, db : Session = Depe
             detail="Token is different"
         )
 
-@app.get("/profile/", response_model = schemas.UserProfile)
+@app.get("/auth/profile/", response_model = schemas.UserProfile)
 async def read_profile(token: str = Depends(oauth2_scheme),
                         db: Session = Depends(get_db)):
     if not utils.is_valid_accessToken(token):
@@ -137,7 +138,7 @@ async def read_profile(token: str = Depends(oauth2_scheme),
     print(user.nickname, user.email, user.manner_temporature, user.create_at)
     return user
 
-@app.get("/profile/{email}")
+@app.get("/auth/profile/{email}")
 async def read_profile_email(email: str, 
                         token: str = Depends(oauth2_scheme),
                         db: Session = Depends(get_db)):
@@ -157,7 +158,7 @@ async def read_profile_email(email: str,
     print(user.nickname, user.email, user.manner_temporature, user.create_at)
     return user
 
-@app.post("/update_nickname/", response_model = schemas.UserProfile)
+@app.post("/auth/update_nickname/", response_model = schemas.UserProfile)
 async def update_nickname(nickname: schemas.UserNickname,
                           token: str = Depends(oauth2_scheme),
                           db: Session = Depends(get_db)):
@@ -171,7 +172,49 @@ async def update_nickname(nickname: schemas.UserNickname,
     user = crud.update_user_nickname(db, user, new_nickname)
     return user
 
-@app.get("/items/")
+@app.post("/auth/update_locate/", response_model = schemas.UserProfile)
+async def update_locate(locate: schemas.UserLocate,
+                          token: str = Depends(oauth2_scheme),
+                          db: Session = Depends(get_db)):
+    if not utils.is_valid_accessToken(token):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Token is invalid"
+        )
+    new_locate = locate.new_locate
+    user = utils.get_current_user(token, db)
+    user = crud.update_user_locate(db, user, new_locate)
+    return user
+
+@app.get("/auth/read_usercategory")
+async def read_usercategory(token: str = Depends(oauth2_scheme),
+                            db: Session = Depends(get_db)):
+    if not utils.is_valid_accessToken(token):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Token is invalid"
+        )
+    user = utils.get_current_user(token, db)
+    user_category = crud.get_user_category_by_user(db, user)
+    return user_category
+    
+
+@app.post("/auth/update_usercategory")
+async def update_category(new_usercategory: schemas.UserCategory,
+                          token: str = Depends(oauth2_scheme),
+                          db: Session = Depends(get_db)):
+    if not utils.is_valid_accessToken(token):
+        return HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Token is invalid"
+        )
+    
+    user = utils.get_current_user(token, db)
+    user_category = crud.get_user_category_by_user(db, user)
+    new_category = crud.update_usercategory(db, user_category, new_usercategory)
+    return new_category
+
+@app.get("/auth/items/")
 async def read_items(token: str = Depends(oauth2_scheme)):
     return {"token": token}
 

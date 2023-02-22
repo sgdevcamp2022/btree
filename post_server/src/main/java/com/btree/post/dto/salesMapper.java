@@ -1,7 +1,6 @@
 package com.btree.post.dto;
 
 import com.btree.post.entity.salespost;
-import com.btree.post.util.User;
 import org.springframework.stereotype.Service;
 
 
@@ -9,14 +8,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class salesMapper {
 
-    public salespost toEntity (salesrequestdto salesrequestdto, User user){
+    public salespost toEntity (salesrequestdto salesrequestdto){
         return salespost.builder()
-                .username(user.getUsername())
+                .useremail(salesrequestdto.getUseremail())
+                .nickname(salesrequestdto.getNickname())
                 .title(salesrequestdto.getTitle())
                 .content(salesrequestdto.getContent())
                 .salesimg(salesrequestdto.getSalesimg())
                 .category(salesrequestdto.getCategory())
-                .locate(user.getLocate())
+                .locate(salesrequestdto.getLocate())
                 .price(salesrequestdto.getPrice())
                 .ispoststate(salesrequestdto.getIspoststate())
                 .build();
@@ -30,13 +30,15 @@ public class salesMapper {
                 .content(salespost.getContent())
                 .salesimg(salespost.getSalesimg())
                 .price(salespost.getPrice())
-                .username(salespost.getUsername())
+                .useremail(salespost.getUseremail())
+                .nickname(salespost.getNickname())
                 .category(salespost.getCategory())
                 .locate(salespost.getLocate())
                 .updatetime(salespost.getUpdatetime())
                 .likenum(salespost.getLikenum())
                 .chatnum(salespost.getChatnum())
                 .ispoststate(salespost.getIspoststate())
+                .viewcount(salespost.getViewcount())
                 .build();
     }
 

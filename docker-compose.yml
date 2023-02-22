@@ -18,8 +18,15 @@ services:  # 컨테이너의 서비스라는것을 정의
     tty: true
     volumes:
       - ./elk/search_server:/app
+      - ./crawling/sample1000.json:/app/sample1000.json
+      - ./crawling/sample10000.json:/app/sample10000.json
     ports:
       - 8456:8456
+    environment:
+      - DATABASE_USERNAME=root
+      - DATABASE_PASSWORD=1234
+      - DATABASE=btree_project
+      - DATABASE_HOST=mysql
   setup:
     build:
       context: elk/setup/
@@ -115,6 +122,7 @@ services:  # 컨테이너의 서비스라는것을 정의
     volumes:
       - ./mysql/db:/docker-entrypoint-initdb.d # up되서 처음 실행할 sql문들을 모아놓은 폴더
     environment:
+      TZ: Asia/Seoul
       MYSQL_DATABASE_ACCOUNT: account
       MYSQL_DATABASE: btree_project
       MYSQL_ROOT_HOST: 'root'
