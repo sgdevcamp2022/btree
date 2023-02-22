@@ -24,6 +24,9 @@ spring:
 
 cloud:
   aws:
+    credentials:
+      accessKey: AKIAS7D3UWOCXHVXNWTJ
+      secretKey: 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
     s3:
       bucket: btreepostbucket
       region:

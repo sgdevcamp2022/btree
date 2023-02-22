@@ -31,3 +31,6 @@ application-aws.yml
 elk/elasticsearch/_state/
 elk/elasticsearch/indices/
 elk/elasticsearch/snapshot_cache/
+
+.metals
+post_server/src/main/resources/application.yml

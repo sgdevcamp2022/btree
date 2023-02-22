@@ -45,7 +45,7 @@ public class salescontroller {
                 .body(salesresponsedto);
     }
 
-    @GetMapping// 게시글 목록
+    @PostMapping("/list")// 게시글 목록
     public List<salesresponsedto> findAllPostbyLocation (@RequestParam int page, @RequestParam int size,@RequestBody userdto userdto){
         PageRequest sortByPostid = PageRequest.of(page, size, Sort.by("salespostid").descending());
         return saleservice.findAllpostsbylocate(sortByPostid, userdto.getLocate());
