@@ -39,11 +39,13 @@ public class boardcontroller {
     public ResponseEntity<boardresponsedto> detailPost (@PathVariable("id") Long id,HttpServletRequest req, HttpServletResponse res){
         viewCountUp((long) id,req,res);
         boardpost post=boardservice.findById(id);
+        System.out.println("post nickname : " + post.getNickname());
         boardresponsedto boardresponsedto=boardmapper.fromEntity(post);
+        System.out.println("dto nickname : " + boardresponsedto.getNickname());
         return ResponseEntity.ok()
                 .body(boardresponsedto);
     }
-    @GetMapping//게시글 목록
+    @PostMapping("/list")//게시글 목록
     public List<boardresponsedto>findAllPost(@RequestParam int page,@RequestParam int size,@RequestBody userdto userdto){
         PageRequest sortByPostid=PageRequest.of(page, size, Sort.by("boardpostid").descending());
         return boardservice.findAllpostsbylocate(sortByPostid, userdto.getLocate());

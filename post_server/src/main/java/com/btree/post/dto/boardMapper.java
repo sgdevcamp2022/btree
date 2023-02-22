@@ -23,6 +23,7 @@ public class boardMapper {
                 .boardpostid(boardpost.getBoardpostid())
                 .content(boardpost.getContent())
                 .contentimg(boardpost.getContentimg())
+                .nickname(boardpost.getNickname())
                 .useremail(boardpost.getUseremail())
                 .commentnum(boardpost.getCommentnum())
                 .updatetime(boardpost.getUpdatetime())
